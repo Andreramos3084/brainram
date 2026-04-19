@@ -1,0 +1,15 @@
+.env
+.env.local
+.env.production
+node_modules/
+dist/
+build/
+*.log
+.DS_Store
+prospeccao/data/*.json
+!prospeccao/data/.gitkeep
+marketing/output/
+.vercel/
+.turbo/
+*.bak
+.cloudflared/

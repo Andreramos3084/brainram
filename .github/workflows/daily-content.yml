@@ -1,0 +1,40 @@
+name: Daily content factory
+
+# Gera 1 post/reel/carrossel por dia para Instagram da marca DFY-IA
+# Grátis: GitHub Actions + Claude + sua key Perplexity
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 08 BRT diário
+  workflow_dispatch:
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Generate content
+        working-directory: marketing
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_KEY: ${{ secrets.PERPLEXITY_KEY }}
+        run: bun run scripts/generate-daily.ts
+
+      - name: Upload to Supabase Storage
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: bun run marketing/scripts/upload-assets.ts
+
+      - name: Notify ready-to-publish
+        env:
+          EVO_URL: ${{ secrets.EVOLUTION_URL }}
+          EVO_KEY: ${{ secrets.EVOLUTION_API_KEY }}
+          ADMIN_PHONE: ${{ secrets.ADMIN_PHONE }}
+        run: |
+          curl -X POST "$EVO_URL/message/sendText/admin" \
+            -H "apikey: $EVO_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"number\":\"$ADMIN_PHONE\",\"text\":\"🎨 Conteúdo de hoje pronto. Aprovar no Supabase Storage.\"}"

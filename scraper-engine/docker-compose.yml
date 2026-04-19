@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes: [redis-data:/data]
+    command: redis-server --appendonly yes
+    ports: ['127.0.0.1:6379:6379']
+
+  api:
+    build: .
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3030
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SCRAPER_API_KEY=${SCRAPER_API_KEY}
+    command: ['node', 'dist/api/server.js']
+    ports: ['127.0.0.1:3030:3030']
+    depends_on: [redis]
+
+  worker:
+    build: .
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - WORKER_CONCURRENCY=2
+    command: ['node', 'dist/queue/worker.js']
+    deploy:
+      replicas: 2
+    depends_on: [redis]
+
+volumes:
+  redis-data:

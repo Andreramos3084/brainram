@@ -1,0 +1,18 @@
+{
+  "name": "dfy-ia-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "dfy-ia-mcp": "./dist/server.js" },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "bun run src/server.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^22.0.0"
+  }
+}

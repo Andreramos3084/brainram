@@ -1,0 +1,14 @@
+{
+  "name": "dfy-ia-prospeccao",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "scrape": "bun run scripts/1-scrape.ts",
+    "enrich": "bun run scripts/2-enrich.ts",
+    "score": "bun run scripts/3-score.ts",
+    "send": "bun run scripts/4-send.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0"
+  }
+}

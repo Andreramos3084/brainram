@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Atendente de IA no WhatsApp da sua clínica. Responde em 3s, qualifica pacientes, agenda direto no Google Calendar. 24/7." />
+<meta property="og:title" content="Atendente de IA 24/7 para seu WhatsApp — DFY-IA" />
+<meta property="og:description" content="Recupere 8-15 pacientes/mês que você perde fora do horário. Setup em 48h." />
+<meta property="og:type" content="website" />
+<title>DFY-IA — Atendente de IA 24/7 no seu WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: {
+        brand: {
+          50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac',
+          400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d',
+          800: '#166534', 900: '#14532d'
+        },
+        ink: { 900: '#0a0a0a', 800: '#171717', 700: '#262626', 600: '#404040' }
+      },
+      animation: {
+        'fade-up': 'fadeUp 0.6s ease-out',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        fadeUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } }
+      }
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .gradient-mesh {
+    background:
+      radial-gradient(at 20% 0%, rgba(34, 197, 94, 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 100%, rgba(34, 197, 94, 0.08) 0px, transparent 50%),
+      #0a0a0a;
+  }
+  .chat-bubble-in {
+    background: #262626; color: white; border-radius: 16px 16px 16px 4px;
+  }
+  .chat-bubble-out {
+    background: #22c55e; color: white; border-radius: 16px 16px 4px 16px;
+  }
+</style>
+</head>
+<body class="bg-ink-900 text-white">
+
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-900/80 border-b border-white/5">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center font-black">D</div>
+      <span class="font-bold text-lg">DFY-IA</span>
+    </div>
+    <a href="#precos" class="bg-brand-500 hover:bg-brand-600 text-ink-900 px-5 py-2 rounded-lg font-semibold text-sm transition">Quero meu atendente</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="gradient-mesh pt-32 pb-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/20 rounded-full px-4 py-1.5 text-sm text-brand-300 mb-6">
+      <span class="w-2 h-2 bg-brand-400 rounded-full animate-pulse-slow"></span>
+      Ativo em 3 clínicas de Campinas neste momento
+    </div>
+    <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-none">
+      Seu WhatsApp responde<br/>
+      <span class="text-brand-400">em 3 segundos.</span><br/>
+      <span class="text-white/60">24 horas por dia.</span>
+    </h1>
+    <p class="text-xl text-white/70 max-w-2xl mb-10 leading-relaxed">
+      Atendente de IA que qualifica paciente, tira dúvida, manda preço e agenda direto no Google Calendar — <b class="text-white">enquanto você dorme.</b>
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="#precos" class="bg-brand-500 hover:bg-brand-600 text-ink-900 px-8 py-4 rounded-xl font-bold text-lg transition transform hover:scale-105">
+        Quero recuperar pacientes perdidos →
+      </a>
+      <a href="#demo" class="bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-4 rounded-xl font-semibold text-lg transition">
+        Ver vídeo de 2min
+      </a>
+    </div>
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div><div class="text-3xl font-black text-brand-400">3s</div><div class="text-sm text-white/50 mt-1">Tempo médio<br/>de resposta</div></div>
+      <div><div class="text-3xl font-black text-brand-400">24/7</div><div class="text-sm text-white/50 mt-1">Atende de<br/>madrugada</div></div>
+      <div><div class="text-3xl font-black text-brand-400">48h</div><div class="text-sm text-white/50 mt-1">Setup<br/>completo</div></div>
+      <div><div class="text-3xl font-black text-brand-400">+12</div><div class="text-sm text-white/50 mt-1">Pacientes/mês<br/>recuperados</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="py-20 px-6 border-t border-white/5">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">
+      Quanto você perde toda noite<br/><span class="text-brand-400">sem perceber?</span>
+    </h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div class="text-brand-400 font-mono text-sm mb-3">22:47</div>
+        <p class="text-lg leading-relaxed text-white/80">"Oi, quanto é clareamento?"<br/><span class="text-white/40 text-base">→ lida amanhã às 9h.</span><br/><span class="text-red-400 font-semibold">→ cliente já marcou na clínica do lado.</span></p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div class="text-brand-400 font-mono text-sm mb-3">Domingo 14:30</div>
+        <p class="text-lg leading-relaxed text-white/80">"Tem horário na segunda?"<br/><span class="text-white/40 text-base">→ ninguém responde.</span><br/><span class="text-red-400 font-semibold">→ paciente desistiu.</span></p>
+      </div>
+    </div>
+    <div class="mt-10 text-center">
+      <div class="inline-block bg-red-500/10 border border-red-500/20 rounded-2xl px-8 py-6">
+        <div class="text-6xl font-black text-red-400">R$ 8.400</div>
+        <div class="text-white/60 mt-2">é a média que uma clínica odonto perde por mês<br/>em leads que ninguém respondeu a tempo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CHAT -->
+<section id="demo" class="py-20 px-6 border-t border-white/5 bg-gradient-to-b from-ink-900 to-ink-800">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight text-center">
+      Veja na prática
+    </h2>
+    <p class="text-xl text-white/60 mb-12 text-center">Conversa real de uma clínica parceira (nome omitido)</p>
+    <div class="max-w-md mx-auto bg-gradient-to-b from-ink-700 to-ink-800 rounded-3xl p-6 border border-white/10 shadow-2xl">
+      <div class="flex items-center gap-3 pb-4 border-b border-white/5 mb-4">
+        <div class="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center font-bold text-ink-900">C</div>
+        <div>
+          <div class="font-semibold">Clara — Clínica</div>
+          <div class="text-xs text-brand-400 flex items-center gap-1">
+            <span class="w-2 h-2 bg-brand-400 rounded-full"></span> online
+          </div>
+        </div>
+      </div>
+      <div class="space-y-3 text-sm">
+        <div class="chat-bubble-in p-3 max-w-[85%]">Oi, boa noite. Quanto custa clareamento?</div>
+        <div class="chat-bubble-out p-3 max-w-[85%] ml-auto">
+          Oi! 😊 Temos 2 opções:<br/>
+          • Clareamento a laser (1 sessão): R$ 890<br/>
+          • Caseiro supervisionado: R$ 490<br/>
+          Quer que eu já reserve um horário de avaliação gratuita?
+        </div>
+        <div class="chat-bubble-in p-3 max-w-[85%]">Tem sábado à tarde?</div>
+        <div class="chat-bubble-out p-3 max-w-[85%] ml-auto">
+          Tenho sim! 📅<br/>Sábado 15:00 ou 16:30?
+        </div>
+        <div class="chat-bubble-in p-3 max-w-[85%]">15h tá ótimo</div>
+        <div class="chat-bubble-out p-3 max-w-[85%] ml-auto">
+          Agendado! ✅ Vou te mandar o endereço e lembrete 1h antes. Seu nome?
+        </div>
+      </div>
+      <div class="mt-4 text-center text-xs text-white/40">⏱ Conversa completa em 2min47s — 23:14 de terça</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="py-20 px-6 border-t border-white/5">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-black mb-16 tracking-tight text-center">Como funciona</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <div class="text-5xl font-black text-brand-400 mb-4">01</div>
+        <h3 class="text-xl font-bold mb-3">Você preenche o formulário</h3>
+        <p class="text-white/60 leading-relaxed">15 minutos. Você conta sobre a clínica, serviços, preços e horário. A gente cuida do resto.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <div class="text-5xl font-black text-brand-400 mb-4">02</div>
+        <h3 class="text-xl font-bold mb-3">Nossa IA é treinada</h3>
+        <p class="text-white/60 leading-relaxed">Em 48h a atendente virtual conhece sua clínica melhor que muita recepcionista. Fala no seu tom.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <div class="text-5xl font-black text-brand-400 mb-4">03</div>
+        <h3 class="text-xl font-bold mb-3">WhatsApp ativo 24/7</h3>
+        <p class="text-white/60 leading-relaxed">Responde, qualifica, agenda, confirma, lembra. Você acompanha tudo num dashboard simples.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section id="precos" class="py-20 px-6 border-t border-white/5 bg-gradient-to-b from-ink-800 to-ink-900">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight text-center">Investimento</h2>
+    <p class="text-xl text-white/60 mb-16 text-center">Primeira sessão de paciente já paga 6 meses do serviço.</p>
+    <div class="bg-gradient-to-br from-brand-500/10 to-transparent border-2 border-brand-500/30 rounded-3xl p-10 relative">
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-ink-900 px-4 py-1 rounded-full text-xs font-bold">OFERTA DE LANÇAMENTO</div>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="text-sm text-white/50 mb-2">Setup único</div>
+          <div class="flex items-baseline gap-2 mb-6">
+            <span class="text-white/30 line-through text-2xl">R$ 3.997</span>
+            <span class="text-6xl font-black">R$ 1.997</span>
+          </div>
+          <div class="text-sm text-white/50 mb-2">+ mensalidade</div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-black text-brand-400">R$ 397</span>
+            <span class="text-white/50">/mês</span>
+          </div>
+        </div>
+        <div>
+          <ul class="space-y-3 text-white/80">
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Número WhatsApp dedicado</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> IA treinada no seu negócio</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Integração Google Calendar</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Dashboard web próprio</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Até 3 ajustes por mês</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Relatório mensal em PDF</li>
+            <li class="flex gap-2"><span class="text-brand-400">✓</span> Suporte WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+      <a href="#contato" class="block text-center bg-brand-500 hover:bg-brand-600 text-ink-900 py-4 rounded-xl font-bold text-lg mt-8 transition transform hover:scale-[1.02]">
+        Quero começar agora →
+      </a>
+      <div class="text-center mt-4 text-sm text-white/50">
+        🛡️ Garantia 7 dias. Se não gerar 3 agendamentos, devolvemos 100%.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-20 px-6 border-t border-white/5">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">Perguntas</h2>
+    <div class="space-y-4">
+      <details class="bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer group">
+        <summary class="font-semibold text-lg flex justify-between items-center">A IA pode errar e passar informação errada? <span class="group-open:rotate-180 transition">↓</span></summary>
+        <p class="mt-4 text-white/70 leading-relaxed">A IA só responde com base no que VOCÊ informou. Se alguém perguntar algo fora do escopo, ela passa pro humano automaticamente. Nunca inventa preço, nunca dá diagnóstico.</p>
+      </details>
+      <details class="bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer group">
+        <summary class="font-semibold text-lg flex justify-between items-center">Substitui minha recepcionista? <span class="group-open:rotate-180 transition">↓</span></summary>
+        <p class="mt-4 text-white/70 leading-relaxed">Não. Ela cobre o que sua recepcionista não consegue: madrugada, almoço, domingo, picos. E libera tempo dela pro que importa: atender pessoa na clínica.</p>
+      </details>
+      <details class="bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer group">
+        <summary class="font-semibold text-lg flex justify-between items-center">Vou perder meu número atual? <span class="group-open:rotate-180 transition">↓</span></summary>
+        <p class="mt-4 text-white/70 leading-relaxed">Não. Você recebe um número dedicado novo. Muitas clínicas mantêm o antigo pra relacionamento e usam o novo só pra captação.</p>
+      </details>
+      <details class="bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer group">
+        <summary class="font-semibold text-lg flex justify-between items-center">Quanto tempo até estar funcionando? <span class="group-open:rotate-180 transition">↓</span></summary>
+        <p class="mt-4 text-white/70 leading-relaxed">48h depois do formulário. Primeira semana é de ajuste fino — você avalia cada conversa e refinamos o tom.</p>
+      </details>
+      <details class="bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer group">
+        <summary class="font-semibold text-lg flex justify-between items-center">Cancelar é fácil? <span class="group-open:rotate-180 transition">↓</span></summary>
+        <p class="mt-4 text-white/70 leading-relaxed">Um clique no dashboard. Sem multa, sem fidelidade. Você fica porque quer.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contato" class="py-24 px-6 border-t border-white/5 bg-gradient-to-br from-brand-600/20 via-brand-900/10 to-ink-900">
+  <div class="max-w-3xl mx-auto text-center">
+    <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">
+      Cada noite sem<br/>atendente é R$ 280<br/>indo pro concorrente.
+    </h2>
+    <p class="text-xl text-white/70 mb-10">Só vou ativar 10 clínicas em Abril. Depois fecho pra fila de espera.</p>
+    <a href="https://wa.me/5519999999999?text=Quero%20saber%20sobre%20o%20atendente%20de%20IA" class="inline-block bg-brand-500 hover:bg-brand-600 text-ink-900 px-10 py-5 rounded-xl font-bold text-xl transition transform hover:scale-105 shadow-2xl shadow-brand-500/30">
+      Falar no WhatsApp agora →
+    </a>
+    <div class="mt-8 text-sm text-white/50">
+      Resposta em até 10 minutos • Segunda a sexta 9h-19h
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-10 px-6 border-t border-white/5 text-center text-white/40 text-sm">
+  <p>© 2026 DFY-IA — CNPJ MEI • Campinas/SP</p>
+  <p class="mt-2">Tecnologia: Evolution API + Claude IA + Google Workspace</p>
+</footer>
+
+</body>
+</html>

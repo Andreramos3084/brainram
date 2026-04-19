@@ -1,0 +1,82 @@
+name: Daily prospect scrape
+
+# Substitui n8n: roda gratuitamente via GitHub Actions (2000min/mês free)
+# Dispara scrape+enrich+score todo dia 07:00 BRT
+
+on:
+  schedule:
+    - cron: '0 10 * * 1-5'  # 10 UTC = 07 BRT, seg-sex
+  workflow_dispatch:
+    inputs:
+      query:
+        description: 'Nicho'
+        default: 'clínica odontológica'
+      city:
+        description: 'Cidade'
+        default: 'Campinas'
+      limit:
+        description: 'Limite'
+        default: '100'
+
+jobs:
+  scrape-and-score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        working-directory: prospeccao
+        run: bun install
+
+      - name: Trigger scrape on engine
+        working-directory: prospeccao
+        env:
+          SCRAPER_URL: ${{ secrets.SCRAPER_URL }}
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        run: |
+          QUERY="${{ github.event.inputs.query || 'clínica odontológica' }}"
+          CITY="${{ github.event.inputs.city || 'Campinas' }}"
+          LIMIT="${{ github.event.inputs.limit || '100' }}"
+          bun run scripts/1-scrape-v2.ts "$QUERY" "$CITY" "$LIMIT"
+
+      - name: Enrich (website signals, free)
+        working-directory: prospeccao
+        env:
+          PERPLEXITY_KEY: ${{ secrets.PERPLEXITY_KEY }}
+        run: |
+          FILE=$(ls -t data/leads-raw-*.json | head -1)
+          bun run scripts/2-enrich.ts "$FILE"
+
+      - name: Score with Haiku (cheap)
+        working-directory: prospeccao
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          FILE=$(ls -t data/leads-enriched-*.json | head -1)
+          bun run scripts/3-score-haiku.ts "$FILE"
+
+      - name: Commit results
+        run: |
+          git config user.name github-actions
+          git config user.email bot@dfy-ia
+          git add prospeccao/data/
+          git commit -m "daily scrape $(date +%Y-%m-%d)" || echo "nothing to commit"
+          git push
+
+      - name: Notify (ready for review)
+        env:
+          EVO_URL: ${{ secrets.EVOLUTION_URL }}
+          EVO_KEY: ${{ secrets.EVOLUTION_API_KEY }}
+          ADMIN_PHONE: ${{ secrets.ADMIN_PHONE }}
+        run: |
+          FILE=$(ls -t prospeccao/data/leads-scored-*.json | head -1)
+          COUNT=$(jq '[.[] | select(.score >= 60)] | length' "$FILE")
+          curl -X POST "$EVO_URL/message/sendText/admin" \
+            -H "apikey: $EVO_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"number\":\"$ADMIN_PHONE\",\"text\":\"📊 Scrape diário pronto: $COUNT leads qualificados. Revisar e aprovar envio: https://github.com/USER/REPO/actions\"}"
