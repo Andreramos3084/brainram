@@ -79,4 +79,4 @@ jobs:
           curl -X POST "$EVO_URL/message/sendText/admin" \
             -H "apikey: $EVO_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"number\":\"$ADMIN_PHONE\",\"text\":\"📊 Scrape diário pronto: $COUNT leads qualificados. Revisar e aprovar envio: https://github.com/USER/REPO/actions\"}"
+            -d "{\"number\":\"$ADMIN_PHONE\",\"text\":\"📊 Scrape diário pronto: $COUNT leads qualificados. Revisar e aprovar envio: ${{ github.server_url }}/${{ github.repository }}/actions\"}"

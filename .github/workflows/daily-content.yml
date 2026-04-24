@@ -23,10 +23,11 @@ jobs:
         run: bun run scripts/generate-daily.ts
 
       - name: Upload to Supabase Storage
+        working-directory: marketing
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: bun run marketing/scripts/upload-assets.ts
+        run: bun run scripts/upload-assets.ts
 
       - name: Notify ready-to-publish
         env:

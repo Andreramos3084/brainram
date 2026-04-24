@@ -1,0 +1,20 @@
+services:
+  dfy-sales:
+    build: .
+    container_name: dfy-sales
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: dfy-tunnel
+    restart: unless-stopped
+    depends_on: [dfy-sales]
+    command: tunnel --no-autoupdate --url http://dfy-sales:8080

@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="Atendente de IA no WhatsApp da sua clínica. Responde em 3s, qualifica pacientes, agenda direto no Google Calendar. 24/7." />
-<meta property="og:title" content="Atendente de IA 24/7 para seu WhatsApp — DFY-IA" />
+<meta property="og:title" content="Atendente de IA 24/7 para seu WhatsApp — BrainRam" />
 <meta property="og:description" content="Recupere 8-15 pacientes/mês que você perde fora do horário. Setup em 48h." />
 <meta property="og:type" content="website" />
-<title>DFY-IA — Atendente de IA 24/7 no seu WhatsApp</title>
+<title>BrainRam — Atendente de IA 24/7 no seu WhatsApp</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -60,7 +60,7 @@ tailwind.config = {
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center font-black">D</div>
-      <span class="font-bold text-lg">DFY-IA</span>
+      <span class="font-bold text-lg">BrainRam</span>
     </div>
     <a href="#precos" class="bg-brand-500 hover:bg-brand-600 text-ink-900 px-5 py-2 rounded-lg font-semibold text-sm transition">Quero meu atendente</a>
   </div>
@@ -189,41 +189,65 @@ tailwind.config = {
 <!-- PREÇOS -->
 <section id="precos" class="py-20 px-6 border-t border-white/5 bg-gradient-to-b from-ink-800 to-ink-900">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight text-center">Investimento</h2>
-    <p class="text-xl text-white/60 mb-16 text-center">Primeira sessão de paciente já paga 6 meses do serviço.</p>
-    <div class="bg-gradient-to-br from-brand-500/10 to-transparent border-2 border-brand-500/30 rounded-3xl p-10 relative">
-      <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-ink-900 px-4 py-1 rounded-full text-xs font-bold">OFERTA DE LANÇAMENTO</div>
-      <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <div class="text-sm text-white/50 mb-2">Setup único</div>
-          <div class="flex items-baseline gap-2 mb-6">
-            <span class="text-white/30 line-through text-2xl">R$ 3.997</span>
-            <span class="text-6xl font-black">R$ 1.997</span>
-          </div>
-          <div class="text-sm text-white/50 mb-2">+ mensalidade</div>
-          <div class="flex items-baseline gap-2">
-            <span class="text-4xl font-black text-brand-400">R$ 397</span>
-            <span class="text-white/50">/mês</span>
-          </div>
+    <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight text-center">Planos</h2>
+    <p class="text-xl text-white/60 mb-4 text-center">Sem setup. Sem fidelidade. <b class="text-white">7 dias grátis</b> pra testar.</p>
+    <p class="text-sm text-white/50 mb-12 text-center">Primeira sessão de paciente já paga 2 meses.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col">
+        <div class="text-sm text-white/50 mb-1">Basic</div>
+        <div class="flex items-baseline gap-1 mb-4">
+          <span class="text-5xl font-black">R$ 297</span>
+          <span class="text-white/50">/mês</span>
         </div>
-        <div>
-          <ul class="space-y-3 text-white/80">
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Número WhatsApp dedicado</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> IA treinada no seu negócio</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Integração Google Calendar</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Dashboard web próprio</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Até 3 ajustes por mês</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Relatório mensal em PDF</li>
-            <li class="flex gap-2"><span class="text-brand-400">✓</span> Suporte WhatsApp</li>
-          </ul>
+        <p class="text-sm text-white/60 mb-6">Pra clínica começando ou solo.</p>
+        <ul class="space-y-2 text-sm text-white/80 flex-1">
+          <li>✓ 1 número WhatsApp dedicado</li>
+          <li>✓ IA treinada no seu negócio</li>
+          <li>✓ Integração Google Calendar</li>
+          <li>✓ Até 500 conversas/mês</li>
+          <li>✓ Dashboard próprio</li>
+          <li>✓ Suporte WhatsApp</li>
+        </ul>
+        <a href="#contato" class="block text-center bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-bold mt-6 transition">Testar 7 dias grátis</a>
+      </div>
+      <div class="bg-gradient-to-br from-brand-500/15 to-transparent border-2 border-brand-500/50 rounded-3xl p-8 flex flex-col relative transform md:scale-105">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-ink-900 px-3 py-1 rounded-full text-xs font-bold">MAIS ESCOLHIDO</div>
+        <div class="text-sm text-brand-400 mb-1">Pro</div>
+        <div class="flex items-baseline gap-1 mb-4">
+          <span class="text-5xl font-black">R$ 397</span>
+          <span class="text-white/50">/mês</span>
         </div>
+        <p class="text-sm text-white/60 mb-6">Pra clínica de 2-5 dentistas.</p>
+        <ul class="space-y-2 text-sm text-white/80 flex-1">
+          <li>✓ Tudo do Basic +</li>
+          <li>✓ Até 2.000 conversas/mês</li>
+          <li>✓ Relatório mensal em PDF</li>
+          <li>✓ Até 3 ajustes no agente/mês</li>
+          <li>✓ Resposta em 30s</li>
+          <li>✓ Follow-up automático 48h</li>
+        </ul>
+        <a href="#contato" class="block text-center bg-brand-500 hover:bg-brand-600 text-ink-900 py-3 rounded-xl font-bold mt-6 transition transform hover:scale-[1.02]">Testar 7 dias grátis</a>
       </div>
-      <a href="#contato" class="block text-center bg-brand-500 hover:bg-brand-600 text-ink-900 py-4 rounded-xl font-bold text-lg mt-8 transition transform hover:scale-[1.02]">
-        Quero começar agora →
-      </a>
-      <div class="text-center mt-4 text-sm text-white/50">
-        🛡️ Garantia 7 dias. Se não gerar 3 agendamentos, devolvemos 100%.
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col">
+        <div class="text-sm text-white/50 mb-1">Business</div>
+        <div class="flex items-baseline gap-1 mb-4">
+          <span class="text-5xl font-black">R$ 497</span>
+          <span class="text-white/50">/mês</span>
+        </div>
+        <p class="text-sm text-white/60 mb-6">Pra clínica com time de atendimento.</p>
+        <ul class="space-y-2 text-sm text-white/80 flex-1">
+          <li>✓ Tudo do Pro +</li>
+          <li>✓ Conversas ilimitadas</li>
+          <li>✓ Múltiplos WhatsApp</li>
+          <li>✓ Integração CRM próprio</li>
+          <li>✓ Ajustes ilimitados</li>
+          <li>✓ Suporte prioritário 2h</li>
+        </ul>
+        <a href="#contato" class="block text-center bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-bold mt-6 transition">Testar 7 dias grátis</a>
       </div>
+    </div>
+    <div class="text-center mt-10 text-sm text-white/50">
+      🛡️ 7 dias grátis, sem cartão. Depois: pagamento mensal via Mercado Pago. Cancela quando quiser.
     </div>
   </div>
 </section>
@@ -275,7 +299,7 @@ tailwind.config = {
 
 <!-- FOOTER -->
 <footer class="py-10 px-6 border-t border-white/5 text-center text-white/40 text-sm">
-  <p>© 2026 DFY-IA — CNPJ MEI • Campinas/SP</p>
+  <p>© 2026 BrainRam — CNPJ MEI • Campinas/SP</p>
   <p class="mt-2">Tecnologia: Evolution API + Claude IA + Google Workspace</p>
 </footer>
 

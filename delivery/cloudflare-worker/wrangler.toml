@@ -1,0 +1,7 @@
+name = "brainram-worker"
+main = "index.ts"
+compatibility_date = "2026-04-23"
+account_id = "7705c4258423056fed2d2b1a4c01c99e"
+
+[vars]
+# SUPABASE_URL e SUPABASE_ANON_KEY devem ser secrets (wrangler secret put)

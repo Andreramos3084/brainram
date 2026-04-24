@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "scraper-api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "scraper-engine"],
+      "port": 3030
+    },
+    {
+      "name": "scraper-worker",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:worker", "--prefix", "scraper-engine"],
+      "port": 0
+    },
+    {
+      "name": "mcp-server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "mcp-server"],
+      "port": 0
+    },
+    {
+      "name": "landing-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "landing", "-l", "5173"],
+      "port": 5173
+    }
+  ]
+}

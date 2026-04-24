@@ -27,7 +27,6 @@ export function randomViewport() {
 }
 
 export async function launchBrowser(): Promise<Browser> {
-  // @ts-expect-error playwright-extra type mismatch
   return chromium.launch({
     headless: true,
     args: [

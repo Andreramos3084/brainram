@@ -1,0 +1,14 @@
+{
+  "starter": {
+    "id": "1bb4b341c50c47eb95bd345414d36680",
+    "init_point": "https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=1bb4b341c50c47eb95bd345414d36680"
+  },
+  "pro": {
+    "id": "5f5e825dbe0549b5b73e33a23f73f1dd",
+    "init_point": "https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=5f5e825dbe0549b5b73e33a23f73f1dd"
+  },
+  "premium": {
+    "id": "63ab283b53164d98aa03d3c789e0d2a0",
+    "init_point": "https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=63ab283b53164d98aa03d3c789e0d2a0"
+  }
+}

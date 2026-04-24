@@ -94,7 +94,7 @@ function runCmd(cmd: string, args: string[], cwd: string): Promise<string> {
 }
 
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
-  const { name, arguments: args } = req.params;
+  const { name, arguments: args = {} } = req.params;
 
   try {
     if (name === 'dfy_prospect') {

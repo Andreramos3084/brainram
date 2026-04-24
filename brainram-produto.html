@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainRam — Guia do Produto para Vendas</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e6e6e6;line-height:1.6;max-width:900px;margin:0 auto;padding:40px 20px}
+  h1{font-size:32px;color:#22c55e;margin-bottom:8px}
+  h2{font-size:20px;color:#fff;margin-top:32px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
+  h3{font-size:16px;color:#86efac;margin-top:20px;margin-bottom:8px}
+  a{color:#4ade80;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .tag{display:inline-block;background:#1a3e2e;color:#6fd4a0;padding:2px 10px;border-radius:4px;font-size:12px;margin-right:6px}
+  .tag.wa{background:#1e3a5f;color:#7ab8ff}
+  .card{background:#111;border:1px solid #222;border-radius:10px;padding:20px;margin:16px 0}
+  .url{background:#0f1419;border:1px solid #2a3140;padding:10px 14px;border-radius:6px;font-family:monospace;font-size:13px;color:#4ade80;display:block;margin:8px 0;word-break:break-all}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}
+  .step{display:flex;gap:16px;align-items:flex-start;margin:16px 0}
+  .step-n{min-width:32px;height:32px;background:#22c55e;color:#000;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  ul{margin:8px 0 8px 20px}
+  li{margin:6px 0}
+  .status-ok{color:#22c55e;font-weight:600}
+  .status-warn{color:#facc15}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
+  th,td{padding:10px;text-align:left;border-bottom:1px solid #222}
+  th{color:#8b95a7;font-weight:500;font-size:12px;text-transform:uppercase}
+  .print{background:#1a2029;border:1px solid #2a3140;border-radius:8px;padding:16px;margin:12px 0;font-size:13px;color:#8b95a7}
+  .print strong{color:#fff}
+  .print code{background:#0f1419;padding:2px 6px;border-radius:4px;color:#4ade80;font-family:monospace}
+</style>
+</head>
+<body>
+
+<h1>🧠 BrainRam</h1>
+<p><strong>Atendente de IA no WhatsApp — 24/7, qualifica, agenda e vende.</strong></p>
+<p>Este guia é para você conhecer cada tela do produto antes de vender.</p>
+
+<div class="card">
+  <h3>📋 URLs de Acesso (todas no ar)</h3>
+  <span class="url">https://brainram.com.br</span>
+  <span class="url">https://app.brainram.com.br</span>
+  <span class="url">https://app.brainram.com.br/admin</span>
+  <span class="url">https://evolution.brainram.com.br/manager</span>
+  <span class="url">https://api.brainram.com.br</span>
+</div>
+
+<h2>1. Landing Page — O que o lead vê primeiro</h2>
+<div class="step">
+  <div class="step-n">1</div>
+  <div>
+    <p><strong>URL:</strong> <a href="https://brainram.com.br" target="_blank">brainram.com.br</a></p>
+    <p>A página que o lead acessa antes de comprar. Explica o produto, mostra preços e tem CTA para conversar no WhatsApp.</p>
+    <div class="print">
+      <strong>Seções da página:</strong><br>
+      • Hero — "Atendente de IA 24/7 no seu WhatsApp"<br>
+      • Problema — "Você perde 8-15 pacientes/mês fora do horário"<br>
+      • Demo — vídeo de 2min mostrando o bot respondendo<br>
+      • Como funciona — 3 passos simples<br>
+      • Preços — Starter R$297 / Pro R$497 / Premium R$997<br>
+      • FAQ — dúvidas comuns<br>
+      • CTA final — botão WhatsApp
+    </div>
+  </div>
+</div>
+
+<h2>2. Dashboard do Cliente — O que o cliente vê depois de comprar</h2>
+<div class="step">
+  <div class="step-n">2</div>
+  <div>
+    <p><strong>URL:</strong> <a href="https://app.brainram.com.br" target="_blank">app.brainram.com.br</a></p>
+    <p>O cliente acessa com login/senha. É um painel React moderno, dark theme, mobile-friendly.</p>
+    <div class="print">
+      <strong>Páginas do dashboard:</strong><br>
+      <code>Visão Geral</code> — métricas de conversas, leads atendidos, agendamentos<br>
+      <code>Conversas</code> — histórico completo de chat com cada lead<br>
+      <code>Configurações</code> — horário de funcionamento, serviços, preços, FAQ<br>
+      <code>Relatórios</code> — PDF mensal gerado por IA com insights<br>
+      • Tudo em tempo real, integrado com Supabase<br>
+      • Design minimalista, 79KB gzip
+    </div>
+  </div>
+</div>
+
+<h2>3. Admin Panel — O que VOCÊ vê (André)</h2>
+<div class="step">
+  <div class="step-n">3</div>
+  <div>
+    <p><strong>URL:</strong> <a href="https://app.brainram.com.br/admin" target="_blank">app.brainram.com.br/admin</a></p>
+    <p>Painel de controle da operação. Aqui você gerencia campanhas, leads, templates e números WA.</p>
+    <div class="print">
+      <strong>Abas do admin:</strong><br>
+      <code>Dashboard</code> — envios hoje, respostas, taxa de conversão, MRR<br>
+      <code>Campanhas</code> — criar/editar campanhas de prospecção (nicho, cidade, score mínimo)<br>
+      <code>Leads</code> — lista de 1.342 leads elegíveis, filtros por score/status<br>
+      <code>Copy Templates</code> — templates de mensagem cold por nicho (WhatsApp + Email)<br>
+      <code>Números WA</code> — gerenciar instâncias Evolution (Clickmont, etc.)<br>
+      <code>Métricas</code> — CAC, churn, trial lifecycle, MRR projetado
+    </div>
+  </div>
+</div>
+
+<h2>4. Evolution API Manager — Onde conecta o WhatsApp</h2>
+<div class="step">
+  <div class="step-n">4</div>
+  <div>
+    <p><strong>URL:</strong> <a href="https://evolution.brainram.com.br/manager" target="_blank">evolution.brainram.com.br/manager</a></p>
+    <p>Interface web da Evolution API. Aqui você conecta/desconecta números de WhatsApp.</p>
+    <div class="print">
+      <strong>O que faz:</strong><br>
+      • Criar instância (ex: "Clickmont")<br>
+      • Gerar QR code para conectar o celular<br>
+      • Ver status da conexão (open/close/connecting)<br>
+      • Configurar webhooks (para receber mensagens)<br>
+      • Ver histórico de mensagens enviadas<br>
+      • Atualmente conectado: <span class="status-ok">+551151280116 (Clickmont)</span>
+    </div>
+  </div>
+</div>
+
+<h2>5. Fluxo de Venda Completo (fim-a-fim)</h2>
+
+<table>
+  <tr><th>Fase</th><th>O que acontece</th><th>Quem faz</th></tr>
+  <tr>
+    <td><span class="tag">1. Prospecção</span></td>
+    <td>Scraper busca 500 empresas/dia no Google Maps → enriquece com Perplexity → score 0-100</td>
+    <td>IA (automático)</td>
+  </tr>
+  <tr>
+    <td><span class="tag">2. Qualificação</span></td>
+    <td>Leads com score ≥80 entram na fila. Filtros: solo/MEI, sem franquia, com WhatsApp</td>
+    <td>IA (automático)</td>
+  </tr>
+  <tr>
+    <td><span class="tag wa">3. Abordagem</span></td>
+    <td>Envio de mensagem personalizada via WhatsApp ou Email (rotação de números, rate-limit)</td>
+    <td>IA (automático)</td>
+  </tr>
+  <tr>
+    <td><span class="tag">4. Atendimento</span></td>
+    <td>Lead responde → Claude (Sonnet 4.7) responde em 3s, qualifica, agenda, envia link de pagamento</td>
+    <td>IA 24/7</td>
+  </tr>
+  <tr>
+    <td><span class="tag">5. Fechamento</span></td>
+    <td>Link de checkout Mercado Pago → trial 7 dias → assinatura recorrente</td>
+    <td>IA (automático)</td>
+  </tr>
+  <tr>
+    <td><span class="tag wa">6. Onboarding</span></td>
+    <td>Cliente preenche formulário → Edge Function cria tenant + instância WA + prompt personalizado</td>
+    <td>IA 100%</td>
+  </tr>
+  <tr>
+    <td><span class="tag">7. Retenção</span></td>
+    <td>Relatório mensal PDF, alerta de churn, upsell automático</td>
+    <td>IA (automático)</td>
+  </tr>
+</table>
+
+<h2>6. Nichos Atendidos (prompts prontos)</h2>
+<div class="grid">
+  <div class="card">
+    <strong>🦷 Odontologia</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Clínicas odontológicas, implantes, ortodontia</span>
+  </div>
+  <div class="card">
+    <strong>❤️ Cardiologia</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Consultas, exames, check-up cardíaco</span>
+  </div>
+  <div class="card">
+    <strong>🔬 Clínica de Imagem</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Raio-X, tomografia, ressonância</span>
+  </div>
+  <div class="card">
+    <strong>🥗 Nutrição</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Consultas, planos alimentares</span>
+  </div>
+  <div class="card">
+    <strong>🧪 Laboratório</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Exames de sangue, análises clínicas</span>
+  </div>
+  <div class="card">
+    <strong>🏥 Fisioterapia</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Reabilitação, pilates, RPG</span>
+  </div>
+  <div class="card">
+    <strong>🧠 Psicologia</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Terapia, avaliações, consultas</span>
+  </div>
+  <div class="card">
+    <strong>🏠 Imobiliária</strong><br>
+    <span style="font-size:13px;color:#8b95a7">Captação, visitas, propostas</span>
+  </div>
+</div>
+
+<h2>7. Preços e Planos</h2>
+<table>
+  <tr><th>Plano</th><th>Mensalidade</th><th>Setup</th><th>O que inclui</th></tr>
+  <tr>
+    <td><strong>Starter</strong></td>
+    <td>R$ 297/mês</td>
+    <td>R$ 997</td>
+    <td>1 número WA, 1 nicho, até 500 conversas/mês, dashboard básico</td>
+  </tr>
+  <tr>
+    <td><strong>Pro</strong></td>
+    <td>R$ 497/mês</td>
+    <td>R$ 1.497</td>
+    <td>2 números WA, multi-nicho, até 2.000 conversas/mês, dashboard completo, relatórios IA</td>
+  </tr>
+  <tr>
+    <td><strong>Premium</strong></td>
+    <td>R$ 997/mês</td>
+    <td>R$ 2.497</td>
+    <td>5 números WA, white-label, API aberta, onboarding prioritário, suporte humano</td>
+  </tr>
+</table>
+
+<h2>8. Stack Técnica (para objeções)</h2>
+<div class="print">
+  <strong>Segurança:</strong> SSL Cloudflare, LGPD compliance, opt-out automático, audit trail<br>
+  <strong>Uptime:</strong> 4 conexões de tunnel Cloudflare (gru07, gru11, gru18, gru21)<br>
+  <strong>Backups:</strong> Supabase com PITR (point-in-time recovery)<br>
+  <strong>Escalabilidade:</strong> Docker Compose, pode escalar workers horizontalmente<br>
+  <strong>Custo operacional:</strong> ~R$ 150/mês (infra zero, só API Claude + chip WhatsApp)
+</div>
+
+<h2>9. Checklist Pré-Venda</h2>
+<ul>
+  <li>☐ Acesse <a href="https://brainram.com.br" target="_blank">brainram.com.br</a> e veja a landing</li>
+  <li>☐ Acesse <a href="https://app.brainram.com.br" target="_blank">app.brainram.com.br</a> e veja o dashboard (login: precisa de tenant ativo)</li>
+  <li>☐ Acesse <a href="https://app.brainram.com.br/admin" target="_blank">app.brainram.com.br/admin</a> e veja o admin (cookie: ADMIN_KEY=brainram-admin)</li>
+  <li>☐ Acesse <a href="https://evolution.brainram.com.br/manager" target="_blank">evolution.brainram.com.br/manager</a> e veja o manager do WhatsApp</li>
+  <li>☐ Leia o ICP em <code>ops/icp-clinica-odonto.md</code> para entender a dor do cliente</li>
+  <li>☐ Teste o scraper: <code>cd prospeccao && bash run.sh "clínica odontológica" "Campinas" 20</code></li>
+</ul>
+
+<h2>10. Como fazer uma demo ao vivo</h2>
+<div class="step">
+  <div class="step-n">1</div>
+  <div>
+    <p><strong>Mostre a landing:</strong> "Esse é o site que seus leads vão ver. Tudo automático."</p>
+  </div>
+</div>
+<div class="step">
+  <div class="step-n">2</div>
+  <div>
+    <p><strong>Mande mensagem no WhatsApp do demo:</strong> +551151280116</p>
+    <p>O bot responde em segundos. Mostre como ele qualifica, agenda e envia link de pagamento.</p>
+  </div>
+</div>
+<div class="step">
+  <div class="step-n">3</div>
+  <div>
+    <p><strong>Mostre o admin:</strong> "Aqui eu vejo quantos leads você recebeu hoje, quantos converteram, quanto de MRR."</p>
+  </div>
+</div>
+<div class="step">
+  <div class="step-n">4</div>
+  <div>
+    <p><strong>Feche:</strong> "Setup em 48h, 7 dias de teste. Se não gostar, devolvo 100%."</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:40px">
+  <h3>📞 Controle da operação</h3>
+  <p><strong>Seu WhatsApp pessoal:</strong> +55 19 99876-0212 (recebe alertas de leads, escaladas, novos clientes)</p>
+  <p><strong>Número do bot (demo):</strong> +55 11 5128-0116</p>
+  <p><strong>Email:</strong> contato@brainram.com.br</p>
+</div>
+
+</body>
+</html>

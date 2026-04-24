@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8" />
+<title>Contrato de Adesão — BrainRam {{PLAN_NAME}}</title>
+<style>
+  @page { size: A4; margin: 2cm 2cm 2cm 2cm; }
+  body { font-family: "Helvetica","Arial",sans-serif; font-size: 11pt; color:#111; line-height:1.45; }
+  h1 { font-size:16pt; margin:0 0 4pt; text-align:center; }
+  h2 { font-size:12pt; margin:18pt 0 6pt; color:#1a4480; }
+  h3 { font-size:11pt; margin:10pt 0 4pt; }
+  p { margin: 4pt 0; text-align: justify; }
+  .header { text-align:center; border-bottom:1px solid #ccc; padding-bottom:10pt; margin-bottom:14pt; }
+  .subtitle { font-size:10pt; color:#666; margin-top:2pt; }
+  .box { border:1px solid #ccc; padding:10pt; margin:10pt 0; background:#fafafa; border-radius:4pt; }
+  .sig { margin-top:30pt; display:flex; justify-content:space-between; }
+  .sig div { width:48%; text-align:center; border-top:1px solid #000; padding-top:4pt; font-size:10pt; }
+  table { border-collapse:collapse; width:100%; margin:6pt 0; font-size:10pt; }
+  td, th { border:1px solid #ccc; padding:4pt 8pt; text-align:left; }
+  .small { font-size:9.5pt; color:#333; }
+  .rubrica { text-align:right; font-size:9pt; color:#888; margin-top:20pt; }
+  ol { padding-left:18pt; }
+  ol li { margin:3pt 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CONTRATO DE ADESÃO DE PRESTAÇÃO DE SERVIÇOS</h1>
+  <div class="subtitle">BrainRam — Plano {{PLAN_NAME}} — R$ {{PRICE}}/mês</div>
+</div>
+
+<h2>Partes</h2>
+
+<p><strong>CONTRATADA:</strong> ANDRÉ RAMOS DOS SANTOS, inscrita no CNPJ sob nº <strong>61.774.392/0001-30</strong>, com sede na Rua Lisette Wegmüller, 1492, Jardim Ferrarezzi, Pirassununga/SP, CEP 13.636-166, doravante denominada <strong>BRAINRAM</strong>.</p>
+
+<p><strong>CONTRATANTE:</strong> a pessoa física ou jurídica que efetuar a contratação do plano por meio do checkout do Mercado Pago, cujos dados cadastrados (nome/razão social, CPF/CNPJ, e-mail, telefone e endereço) integram este contrato como se aqui estivessem transcritos.</p>
+
+<h2>Cláusula 1ª — Objeto</h2>
+<p>A BrainRam presta ao CONTRATANTE o serviço de <strong>atendente virtual baseado em Inteligência Artificial para WhatsApp</strong>, denominado <strong>BrainRam {{PLAN_NAME}}</strong>, por meio da qual mensagens recebidas pelo número de WhatsApp do CONTRATANTE são respondidas automaticamente, com capacidade de qualificação de contatos, envio de informações, agendamento e lembretes.</p>
+
+<h2>Cláusula 2ª — Escopo do Plano {{PLAN_NAME}}</h2>
+<div class="box">
+{{SCOPE_TABLE}}
+</div>
+
+<h2>Cláusula 3ª — Valor, Forma de Pagamento e Período de Teste</h2>
+<ol>
+  <li>A mensalidade do plano é de <strong>R$ {{PRICE}}</strong> (reais), cobrada mensalmente.</li>
+  <li>O CONTRATANTE cadastra um cartão de crédito válido no ato da adesão, via checkout do Mercado Pago, para ativação imediata do período de teste.</li>
+  <li>Fica concedido <strong>período de teste gratuito de 7 (sete) dias corridos</strong>, contados da data da adesão, durante o qual nenhum valor é efetivamente debitado do cartão.</li>
+  <li>Após o término do período de teste, caso o CONTRATANTE não solicite o cancelamento, a assinatura passa a ser cobrada mensalmente de forma automática no cartão cadastrado.</li>
+  <li>O CONTRATANTE pode solicitar o <strong>cancelamento com reembolso integral</strong> de qualquer valor cobrado, desde que a solicitação ocorra <strong>dentro dos 7 (sete) dias do período de teste</strong>, por meio do canal oficial (WhatsApp do atendimento BrainRam ou e-mail cadastrado).</li>
+  <li>Após os 7 dias, o CONTRATANTE pode cancelar a qualquer momento — o cancelamento encerra a cobrança do próximo ciclo, sem reembolso proporcional do ciclo em curso.</li>
+</ol>
+
+<h2>Cláusula 4ª — Vigência e Rescisão</h2>
+<ol>
+  <li>O contrato tem vigência por prazo indeterminado, com renovação automática a cada ciclo mensal enquanto houver cobrança bem-sucedida.</li>
+  <li>Qualquer das partes pode rescindir o contrato a qualquer tempo, sem multa, mediante comunicação pelos canais oficiais. A rescisão produz efeitos ao final do ciclo pago.</li>
+  <li>O inadimplemento do CONTRATANTE por 2 (dois) ciclos consecutivos autoriza a BrainRam a suspender imediatamente o serviço e, após 30 dias, rescindir o contrato.</li>
+</ol>
+
+<h2>Cláusula 5ª — Obrigações da BrainRam</h2>
+<ol>
+  <li>Manter o serviço disponível em regime de melhor esforço, com SLA-alvo de 98% mensal, excetuadas janelas de manutenção comunicadas.</li>
+  <li>Fornecer suporte técnico pelo canal oficial em horário comercial.</li>
+  <li>Proteger os dados do CONTRATANTE e de seus clientes conforme a cláusula 7ª (LGPD).</li>
+</ol>
+
+<h2>Cláusula 6ª — Obrigações do CONTRATANTE</h2>
+<ol>
+  <li>Fornecer dados verdadeiros no cadastro e manter cartão válido durante a vigência.</li>
+  <li>Utilizar o serviço apenas para finalidades lícitas, conforme a legislação brasileira.</li>
+  <li>Não usar a ferramenta para envio de spam, correntes, conteúdo ilegal ou material que viole direitos de terceiros.</li>
+  <li>Responsabilizar-se pelo conteúdo das mensagens configuradas em seu agente de IA.</li>
+</ol>
+
+<h2>Cláusula 7ª — Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018)</h2>
+<ol>
+  <li>A BrainRam atua como <strong>operadora</strong> dos dados pessoais tratados em nome do CONTRATANTE (controlador), nos termos do art. 5º, VII, da LGPD.</li>
+  <li>Os dados tratados incluem, sem limitação: números de telefone, conteúdo de mensagens trocadas com pacientes/clientes, nomes, e dados necessários ao agendamento.</li>
+  <li>O tratamento tem as seguintes finalidades: operação do atendente de IA, registro de conversas para auditoria e melhoria contínua, geração de relatórios de uso, e cumprimento de obrigações legais.</li>
+  <li>Os dados são armazenados em infraestrutura com criptografia em trânsito (TLS) e em repouso, no Brasil e/ou em provedores em nuvem com cláusulas contratuais padrão.</li>
+  <li>O prazo de retenção das conversas é de 12 meses; após esse prazo, os dados são anonimizados ou eliminados, salvo obrigação legal de guarda maior.</li>
+  <li>O CONTRATANTE e os titulares dos dados têm assegurados os direitos do art. 18 da LGPD, exercíveis pelo e-mail <strong>dpo@brainram.com.br</strong> ou pelo canal oficial.</li>
+  <li>Em caso de incidente de segurança envolvendo dados pessoais, a BrainRam comunicará o CONTRATANTE em prazo não superior a 48 horas da ciência do fato, com as informações exigidas pela ANPD.</li>
+  <li>A BrainRam não compartilha dados com terceiros fora das finalidades contratadas, exceto por determinação judicial.</li>
+</ol>
+
+<h2>Cláusula 8ª — Propriedade Intelectual</h2>
+<p>Os prompts, templates, código-fonte, interfaces e modelos da BrainRam são de sua propriedade exclusiva. O CONTRATANTE recebe licença de uso não exclusiva, pessoal e intransferível durante a vigência do contrato. É vedado copiar, redistribuir, sublicenciar ou aplicar engenharia reversa.</p>
+
+<h2>Cláusula 9ª — Limitação de Responsabilidade</h2>
+<ol>
+  <li>A BrainRam não se responsabiliza por decisões tomadas pelo CONTRATANTE com base nas respostas do agente de IA. O CONTRATANTE é responsável pela revisão das configurações do agente.</li>
+  <li>A responsabilidade total da BrainRam por quaisquer perdas fica limitada ao valor correspondente a 3 (três) mensalidades do plano contratado.</li>
+  <li>A BrainRam não se responsabiliza por indisponibilidades causadas por terceiros (Meta/WhatsApp, Mercado Pago, provedores de nuvem ou redes).</li>
+</ol>
+
+<h2>Cláusula 10ª — Disposições Gerais</h2>
+<ol>
+  <li>Eventuais alterações neste contrato serão comunicadas ao CONTRATANTE com 30 dias de antecedência; não havendo objeção, consideram-se aceitas.</li>
+  <li>Fica eleito o foro da Comarca de Pirassununga/SP para dirimir controvérsias, renunciando as partes a qualquer outro.</li>
+  <li>A adesão se perfaz eletronicamente no ato do checkout, sendo registrada com data, IP e dados de identificação do CONTRATANTE como aceite digital deste instrumento.</li>
+</ol>
+
+<p class="small">Pirassununga/SP, data da adesão eletrônica.</p>
+
+<div class="sig">
+  <div>BRAINRAM<br><span class="small">CNPJ 61.774.392/0001-30</span></div>
+  <div>CONTRATANTE<br><span class="small">conforme dados de checkout</span></div>
+</div>
+
+<p class="rubrica">BrainRam — Contrato de Adesão {{PLAN_NAME}} v1.0 ({{DATE}})</p>
+</body>
+</html>

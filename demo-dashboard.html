@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFY-IA | Dashboard de Demonstração</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .demo-section {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .demo-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-title::before {
+            content: "▶";
+            color: var(--primary);
+        }
+
+        .whatsapp-demo {
+            background: #25d366;
+            color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .whatsapp-demo::before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            width: 16px;
+            height: 16px;
+            background: #25d366;
+            transform: rotate(45deg);
+        }
+
+        .message {
+            background: white;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin: 8px 0;
+            max-width: 80%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message.client {
+            background: #dcf8c6;
+            margin-left: auto;
+        }
+
+        .message.ai {
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .price-period {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            margin-top: 30px;
+            opacity: 0.9;
+        }
+
+        .toggle-demo {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-demo:hover {
+            background: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">DASHBOARD DE DEMONSTRAÇÃO</div>
+            <h1>DFY-IA | Atendente WhatsApp com IA</h1>
+            <p>Veja exatamente o que você está vendendo: um sistema completo de atendimento automatizado 24/7 que responde, agenda, qualifica e vende pelo WhatsApp da empresa do cliente.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Card 1: O Produto -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🤖</div>
+                    <div>
+                        <div class="card-title">O Produto Completo</div>
+                        <div class="card-subtitle">O que o cliente recebe ao contratar</div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li><strong>Número WhatsApp dedicado</strong> - Instância isolada Evolution API</li>
+                    <li><strong>Agente IA treinado</strong> - Claude + RAG dos dados do negócio</li>
+                    <li><strong>Fluxos inteligentes</strong> - Atendimento, qualificação, agendamento</li>
+                    <li><strong>Google Calendar integrado</strong> - Agenda direto no calendário</li>
+                    <li><strong>Dashboard web</strong> - Métricas, histórico, override humano</li>
+                    <li><strong>Relatório mensal automático</strong> - PDF gerado por IA</li>
+                </ul>
+
+                <div class="demo-section">
+                    <div class="demo-title">Demonstração: Treinamento do Agente</div>
+                    <p>O cliente preenche formulário com:</p>
+                    <ul class="feature-list">
+                        <li>Nome do negócio e serviços</li>
+                        <li>Preços e horários de funcionamento</li>
+                        <li>FAQ comum dos clientes</li>
+                        <li>Tom de voz desejado</li>
+                    </ul>
+                    <button class="toggle-demo" onclick="toggleDemo('agent-training')">Ver Prompt Gerado</button>
+                    <div id="agent-training" style="display: none; margin-top: 15px; padding: 15px; background: #f3f4f6; border-radius: 8px; font-family: monospace; font-size: 0.9rem;">
+Você é o atendente da **Clínica Sorriso Perfeito**.
+Serviços: Clareamento dental (R$800), Limpeza (R$150), Consulta (R$120).
+Horário: Seg-Sex 8h-18h, Sáb 8h-12h.
+Tom: Profissional mas acolhedor. Sempre confirme agendamentos.
+FAQ: Aceitamos todos os planos odontológicos. Temos estacionamento gratuito.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Funcionalidades -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⚡</div>
+                    <div>
+                        <div class="card-title">Funcionalidades do Atendente</div>
+                        <div class="card-subtitle">O que a IA faz automaticamente</div>
+                    </div>
+                </div>
+
+                <div class="whatsapp-demo">
+                    <div class="message client">Oi, quanto custa um clareamento dental?</div>
+                    <div class="message ai">Olá! O clareamento dental na Clínica Sorriso Perfeito custa R$800. Temos disponibilidade para agendar na quinta-feira às 14h ou sexta às 10h. Qual prefere? 😊</div>
+                    <div class="message client">Quinta às 14h funciona. Aceitam Unimed?</div>
+                    <div class="message ai">Perfeito! Agendei sua consulta para quinta, 25/04 às 14h. Sim, aceitamos Unimed e todos os planos odontológicos. Enviei o agendamento para seu Google Calendar. Precisa de mais alguma informação?</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat">
+                        <span class="stat-value">24/7</span>
+                        <span class="stat-label">Atendimento</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">3s</span>
+                        <span class="stat-label">Tempo Resposta</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">98%</span>
+                        <span class="stat-label">Precisão</span>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Fluxos Automatizados</div>
+                    <ul class="feature-list">
+                        <li><strong>Qualificação de leads</strong> - Pergunta orçamento, urgência</li>
+                        <li><strong>Agendamento inteligente</strong> - Sugere horários disponíveis</li>
+                        <li><strong>Confirmação automática</strong> - Lembretes 24h antes</li>
+                        <li><strong>Resgate de não-show</strong> - Reagenda automaticamente</li>
+                        <li><strong>Upsell cruzado</strong> - Sugere serviços relacionados</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3: Dashboard Cliente -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div>
+                        <div class="card-title">Dashboard do Cliente</div>
+                        <div class="card-subtitle">O que o cliente monitora</div>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Métricas em Tempo Real</div>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-value">42</span>
+                            <span class="stat-label">Conversas Hoje</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Agendamentos</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">R$ 2.850</span>
+                            <span class="stat-label">Faturamento</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Histórico de Conversas</div>
+                    <p style="margin-bottom: 10px;">Cliente pode ver e intervir em qualquer conversa:</p>
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Maria Silva - 10:15</span>
+                            <span style="color: var(--secondary);">✓ Agendado</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>João Santos - 11:30</span>
+                            <span style="color: #f59e0b;">⏳ Aguardando</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Ana Costa - 14:20</span>
+                            <span style="color: var(--primary);">💬 Em andamento</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="toggle-demo" onclick="toggleDemo('override-demo')">Demonstrar Override Humano</button>
+                <div id="override-demo" style="display: none; margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px; border: 1px solid #fbbf24;">
+                    <strong>Override Ativado:</strong> O cliente clica em "Assumir Conversa" e digita diretamente como se fosse ele. A IA aprende com as intervenções para melhorar.
+                </div>
+            </div>
+
+            <!-- Card 4: Preços e Upsells -->
+            <div class="card price-card">
+                <div class="card-header" style="border-bottom-color: rgba(255,255,255,0.2);">
+                    <div class="card-icon" style="background: white; color: var(--primary);">💰</div>
+                    <div>
+                        <div class="card-title" style="color: white;">Modelo de Preços</div>
+                        <div class="card-subtitle" style="color: rgba(255,255,255,0.9);">Como você fatura</div>
+                    </div>
+                </div>
+
+                <div class="price">
+                    R$ 1.997
+                    <div class="price-period">setup + R$ 397/mês</div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <div style="font-weight: 600; margin-bottom: 10px;">Upsells (mês 2+):</div>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">🎨 <strong>Gerador de conteúdo:</strong> +R$297/mês</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">🔍 <strong>Prospecção ativa:</strong> +R$497/mês</li>
+                        <li style="padding: 8px 0;">👥 <strong>Multi-atendente:</strong> +R$197/número</li>
+                    </ul>
+                </div>
+
+                <button class="cta-button" onclick="showROI()">Ver ROI do Cliente</button>
+            </div>
+
+            <!-- Card 5: Prospecção Ativa -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🎯</div>
+                    <div>
+                        <div class="card-title">Prospecção Ativa (Upsell)</div>
+                        <div class="card-subtitle">IA encontra novos clientes</div>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Pipeline Automático</div>
+                    <ul class="feature-list">
+                        <li><strong>Scraping Google Maps</strong> - Encontra 500 empresas/dia</li>
+                        <li><strong>Enriquecimento Perplexity</strong> - Pesquisa site + Instagram</li>
+                        <li><strong>Scoring Claude</strong> - Classifica fit 0-100</li>
+                        <li><strong>Mensagem personalizada</strong> - Baseada em algo real do negócio</li>
+                        <li><strong>Envio Evolution API</strong> - Rate limit 50/dia por número</li>
+                        <li><strong>Classificação respostas</strong> - Interessado/Dúvida/Não</li>
+                    </ul>
+                </div>
+
+                <div class="whatsapp-demo" style="background: #8b5cf6;">
+                    <div class="message ai">Oi Dra. Ana, vi o post do clareamento de terça — bombou! Aposto que chegou um monte de WhatsApp perguntando preço e você respondeu todo mundo manualmente né? 😅 Tô ajudando 3 clínicas em Campinas com uma IA que responde isso em 3s e agenda direto. Te interessa um vídeo de 2min mostrando?</div>
+                    <div class="message client">Mostra aí, como funciona?</div>
+                </div>
+
+                <button class="toggle-demo" onclick="toggleDemo('prospecting-stats')">Ver Métricas de Prospecção</button>
+                <div id="prospecting-stats" style="display: none; margin-top: 15px;">
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-value">500</span>
+                            <span class="stat-label">Empresas/dia</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2-5%</span>
+                            <span class="stat-label">Taxa resposta</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2-3</span>
+                            <span class="stat-label">Fechamentos/semana</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Gerador de Conteúdo -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📱</div>
+                    <div>
+                        <div class="card-title">Gerador de Conteúdo (Upsell)</div>
+                        <div class="card-subtitle">Posts automáticos Instagram</div>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Content Factory Diária</div>
+                    <ul class="feature-list">
+                        <li><strong>3 posts Instagram/dia</strong> - Copy + imagem gerada</li>
+                        <li><strong>1 reel/dia</strong> - Vídeo automático com Remotion</li>
+                        <li><strong>1 carrossel/semana</strong> - Conteúdo educativo</li>
+                        <li><strong>Agendamento automático</strong> - Publica nos horários ideais</li>
+                        <li><strong>Tendências do nicho</strong> - Perplexity pesquisa temas</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f472b6, #db2777); color: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div style="width: 40px; height: 40px; background: white; border-radius: 50%;"></div>
+                        <div>
+                            <div style="font-weight: 600;">Clínica Sorriso Perfeito</div>
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Há 2 horas</div>
+                        </div>
+                    </div>
+                    <p>✨ Clareamento dental sem sensibilidade é possível! Nosso novo protocolo usa tecnologia a laser que protege o esmalte enquanto clareia. Resultado: dentes 8 tons mais claros em 1 sessão.</p>
+                    <div style="background: white; height: 200px; border-radius: 8px; margin: 10px 0; display: flex; align-items: center; justify-content: center; color: #333;">
+                        [IMAGEM GERADA POR IA]
+                    </div>
+                    <div style="display: flex; gap: 20px; font-size: 0.9rem;">
+                        <span>❤️ 127</span>
+                        <span>💬 24</span>
+                        <span>📤 18</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">
+                <div class="card-icon">🎓</div>
+                <div>
+                    <div class="card-title">Mini-Curso: Como Vender o DFY-IA</div>
+                    <div class="card-subtitle">Script de vendas e objeções comuns</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="demo-section">
+                    <div class="demo-title">Pitch de 30 Segundos</div>
+                    <p>"Eu automatizo o WhatsApp da sua empresa com uma IA que responde 24/7, agenda consultas e qualifica leads. Você para de perder vendas fora do horário e ganha 3-5 clientes novos por mês sem fazer nada. Custa R$2k de setup e R$397/mês."</p>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-title">Objeções Comuns</div>
+                    <ul class="feature-list">
+                        <li><strong>"É muito caro"</strong> → "Um paciente novo paga 4 meses do serviço"</li>
+                        <li><strong>"Prefiro atender pessoal"</strong> → "A IA só responde fora do seu horário"</li>
+                        <li><strong>"Não confio em IA"</strong> → "7 dias grátis pra testar, cancela se não gostar"</li>
+                        <li><strong>"Já tenho secretária"</strong> → "Ela trabalha 24h? A IA complementa"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="demo-section" style="margin-top: 20px;">
+                <div class="demo-title">Demonstração na Call</div>
+                <ol style="padding-left: 20px; line-height: 1.8;">
+                    <li>Mostre este dashboard (5min)</li>
+                    <li>Demonstre conversa no WhatsApp (3min)</li>
+                    <li>Mostre dashboard do cliente (2min)</li>
+                    <li>Calcule ROI com números dele (3min)</li>
+                    <li>Feche: "Vamos começar com 7 dias grátis?" (2min)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Dashboard de Demonstração DFY-IA | Abra este arquivo localmente no navegador</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Use Ctrl+S para salvar e compartilhar com sua equipe</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDemo(id) {
+            const element = document.getElementById(id);
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showROI() {
+            alert(`ROI TÍPICO DO CLIENTE:
+
+📊 Clínica Odontológica Média:
+- Ticket médio por paciente: R$ 500
+- Pacientes novos/mês SEM IA: 8
+- Pacientes novos/mês COM IA: 12 (+4)
+- Ganho adicional: 4 × R$ 500 = R$ 2.000/mês
+- Custo DFY-IA: R$ 397/mês
+- ROI: R$ 2.000 - R$ 397 = R$ 1.603/mês
+
+💰 Payback: 1.2 meses (R$ 2.000 ÷ R$ 1.603)`);
+        }
+
+        // Simular notificações do dashboard
+        setTimeout(() => {
+            console.log('💡 Dica de Venda: "Cada lead que não responde fora do horário é dinheiro perdido. Nosso sistema recupera 30% desses leads."');
+        }, 5000);
+
+        setTimeout(() => {
+            console.log('📈 Estatística Importante: Clínicas que usam nosso sistema aumentam agendamentos em 40% no primeiro mês.');
+        }, 10000);
+    </script>
+</body>
+</html>

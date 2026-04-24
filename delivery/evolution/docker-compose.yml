@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: evolution_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: evolutionpass
+      POSTGRES_DB: evolution
+    volumes:
+      - evolution_pg_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evolution -d evolution"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: evolution_redis
+    restart: unless-stopped
+    volumes:
+      - evolution_redis_data:/data
+    ports:
+      - "127.0.0.1:6380:6379"
+
+  evolution:
+    image: atendai/evolution-api:latest
+    container_name: evolution_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evolution:evolutionpass@postgres:5432/evolution?schema=public
+      AUTH_TOKEN: 4294967295
+      AUTH_REPLACETOKEN: "true"
+      TZ: America/Sao_Paulo
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://redis:6379
+    ports:
+      - "8080:8080"
+    volumes:
+      - evolution_instances:/evolution/instances
+
+volumes:
+  evolution_pg_data:
+  evolution_instances:
+  evolution_redis_data:

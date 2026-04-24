@@ -32,8 +32,18 @@ services:
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
       - WORKER_CONCURRENCY=2
     command: ['node', 'dist/queue/worker.js']
-    deploy:
-      replicas: 2
+    depends_on: [redis]
+
+  worker-2:
+    build: .
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - WORKER_CONCURRENCY=2
+    command: ['node', 'dist/queue/worker.js']
     depends_on: [redis]
 
 volumes:

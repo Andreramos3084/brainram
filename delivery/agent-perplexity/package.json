@@ -1,0 +1,16 @@
+{
+  "name": "dfy-ia-sales",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "bun run sales-server.ts",
+    "agent": "bun run server.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@types/bun": "^1.3.13",
+    "@types/node": "^22.14.0",
+    "hono": "^4.6.0",
+    "typescript": "^5.8.3"
+  }
+}

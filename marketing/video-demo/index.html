@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Demo WhatsApp — DFY-IA</title>
+<style>
+  :root { --wa-green:#075E54; --wa-light-green:#128C7E; --wa-bubble-me:#DCF8C6; --wa-bubble-other:#FFFFFF; --wa-bg:#E5DDD5; }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  body{background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  .phone{width:420px;height:840px;background:#000;border-radius:44px;padding:12px;box-shadow:0 40px 120px rgba(0,0,0,.5);position:relative}
+  .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:140px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:10}
+  .screen{width:100%;height:100%;border-radius:32px;overflow:hidden;background:var(--wa-bg);display:flex;flex-direction:column;position:relative}
+  .statusbar{background:var(--wa-green);color:#fff;padding:44px 18px 10px;font-size:13px;display:flex;justify-content:space-between;font-weight:600}
+  .header{background:var(--wa-green);color:#fff;padding:10px 14px 14px;display:flex;align-items:center;gap:12px}
+  .avatar{width:40px;height:40px;background:#1a8c6f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+  .header-info{flex:1}
+  .header-info .name{font-weight:600;font-size:16px}
+  .header-info .status{font-size:12px;opacity:.85}
+  .chat{flex:1;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' opacity='.04'><path d='M20 50 Q50 20 80 50' stroke='%23000' fill='none'/></svg>");background-color:var(--wa-bg);padding:16px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+  .msg{max-width:78%;padding:7px 10px 8px;border-radius:8px;font-size:14.2px;line-height:1.35;position:relative;box-shadow:0 1px 0.5px rgba(0,0,0,.13);word-wrap:break-word;animation:pop .25s ease-out}
+  @keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+  .msg .time{display:block;text-align:right;font-size:10.5px;color:#667781;margin-top:2px;margin-left:6px;white-space:nowrap}
+  .msg.me{background:var(--wa-bubble-me);align-self:flex-end;border-radius:8px 8px 0 8px}
+  .msg.me::after{content:"";position:absolute;right:-7px;top:0;border:7px solid transparent;border-left-color:var(--wa-bubble-me);border-top-color:var(--wa-bubble-me)}
+  .msg.other{background:var(--wa-bubble-other);align-self:flex-start;border-radius:8px 8px 8px 0}
+  .msg.other::after{content:"";position:absolute;left:-7px;top:0;border:7px solid transparent;border-right-color:var(--wa-bubble-other);border-top-color:var(--wa-bubble-other)}
+  .typing{display:flex;gap:3px;padding:4px 0}
+  .typing span{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:dot 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}
+  .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes dot{0%,60%,100%{opacity:.3}30%{opacity:1}}
+  .sep{align-self:center;background:#E1F3FB;color:#315469;font-size:11.5px;padding:4px 10px;border-radius:6px;margin:8px 0;font-weight:500}
+  .inputbar{background:#F0F0F0;padding:8px 10px;display:flex;align-items:center;gap:8px;border-top:1px solid #D1D7DB}
+  .inputbar .box{flex:1;background:#fff;border-radius:22px;padding:9px 14px;color:#888;font-size:14px}
+  .inputbar .btn{width:44px;height:44px;border-radius:50%;background:var(--wa-green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px}
+  .controls{position:fixed;top:20px;right:20px;display:flex;gap:10px;flex-direction:column;z-index:100}
+  .controls button{padding:12px 20px;background:#22c55e;color:#000;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .controls button.secondary{background:#475569;color:#fff}
+  .controls button:hover{filter:brightness(1.1)}
+  .tick{color:#53bdeb;font-size:13px;margin-left:3px}
+  .hint{position:fixed;bottom:20px;left:20px;color:#888;font-size:12px;max-width:380px;line-height:1.5}
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="statusbar">
+        <span>19:47</span>
+        <span>●●● 4G ▮▮▮</span>
+      </div>
+      <div class="header">
+        <div style="font-size:22px">←</div>
+        <div class="avatar">S+</div>
+        <div class="header-info">
+          <div class="name">Sorriso+ Odontologia</div>
+          <div class="status" id="status">online</div>
+        </div>
+        <div style="font-size:20px;opacity:.85">📞 ⋮</div>
+      </div>
+      <div class="chat" id="chat">
+        <div class="sep">sexta-feira, 19:47</div>
+      </div>
+      <div class="inputbar">
+        <span style="font-size:20px;color:#54656f">😊</span>
+        <div class="box">Mensagem</div>
+        <div style="font-size:20px;color:#54656f">📎</div>
+        <div style="font-size:20px;color:#54656f">📷</div>
+        <div class="btn">🎤</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="startDemo()">▶ Iniciar demo</button>
+    <button class="secondary" onclick="resetDemo()">↻ Resetar</button>
+  </div>
+
+  <div class="hint">
+    💡 Grave a tela com OBS/Kazam/gravador nativo (Shift+Ctrl+R no Ubuntu).<br>
+    Clique <b>Iniciar demo</b>, deixa rodar os ~105s, narre por cima depois na edição (CapCut grátis).
+  </div>
+
+<script>
+const chat = document.getElementById('chat');
+const status = document.getElementById('status');
+
+// Timing ABSOLUTO — sincronizado com áudio de 71s
+// at = segundo exato que a mensagem aparece
+// typingStart = segundo que começa a digitar (só pra bot)
+const script = [
+  // 0:00–0:04 audio: "Oi. Olha só o que tá acontecendo... consultório já fechou. E tá rolando isso:"
+  // 0:04–0:18 audio: "Paciente manda mensagem. A IA responde em 2s, com nome da clínica. E já qualifica: serviço, convênio, horário."
+  { type:'user', text:'Oi, vocês ainda atendem hoje?', time:'19:47', at:4 },
+  { type:'bot', text:'Oi! 😊 Aqui é da <b>Sorriso+ Odontologia</b>. Hoje o consultório já fechou, mas posso te ajudar a agendar pra semana que vem.<br>Me conta: é pra você ou alguém da família? E qual serviço você tá procurando?', time:'19:47', typingStart:7, at:10 },
+  { type:'user', text:'É pra mim. Queria fazer uma limpeza e avaliar um clareamento', time:'19:48', at:14 },
+  { type:'bot', text:'Perfeito! 👍 Limpeza + avaliação de clareamento dura uns <b>50 min</b>.<br>Você tem convênio ou vai ser particular?', time:'19:48', typingStart:17, at:19 },
+  { type:'user', text:'Particular', time:'19:48', at:22 },
+  // 0:20–0:36 audio: "Olha a parte importante: ela passa o preço. Sem vergonha. Quem achou caro sai fora."
+  { type:'bot', text:'Ótimo. Nossos valores:<br>• Limpeza profissional: <b>R$ 180</b><br>• Avaliação de clareamento: <b>grátis</b> (inclusa)<br><br>Se fizer o clareamento, o valor fica entre R$ 490 e R$ 890 — a gente decide na avaliação.<br><br>Prefere <b>manhã</b>, <b>tarde</b> ou <b>final do dia</b>?', time:'19:49', typingStart:25, at:29 },
+  { type:'user', text:'Final do dia, depois das 18h', time:'19:49', at:35 },
+  // 0:36–0:54 audio: "Agora ela consulta a agenda real, integrada com Google Calendar, e oferece três horários. Paciente escolhe, ela confirma, pede nome, fecha."
+  { type:'bot', text:'Tenho essas opções depois das 18h:<br><br>🗓 <b>Terça 14/04</b> — 18:30<br>🗓 <b>Quinta 16/04</b> — 18:00 ou 19:00<br>🗓 <b>Sexta 17/04</b> — 18:30<br><br>Qual funciona melhor pra você?', time:'19:49', typingStart:39, at:43 },
+  { type:'user', text:'Quinta 16 às 19h tá ótimo', time:'19:50', at:48 },
+  { type:'bot', text:'Anotado! Só preciso do seu <b>nome completo</b> pra confirmar 📝', time:'19:50', typingStart:50, at:52 },
+  { type:'user', text:'Carlos Silva', time:'19:50', at:55 },
+  // 0:54–1:04 audio: "Fecha com endereço, horário, profissional, valor, agenda lembrete automático. Paciente nova, agendada, fora do horário comercial."
+  { type:'bot', text:'Pronto, Carlos! ✅<br><br>📍 <b>Sorriso+ Odontologia</b><br>Rua das Palmeiras, 420 — Cambuí, Campinas<br><br>🗓 Quinta, 16/04 às <b>19:00</b><br>👩‍⚕️ Dra. Marina (limpeza + avaliação)<br>⏱ 50 min<br>💰 R$ 180 (avaliação incluída)<br><br>Já adicionei no sistema. Um dia antes te mando um lembrete aqui.<br><br>Até quinta! 🦷✨', time:'19:50', typingStart:58, at:62 },
+  // 1:04–1:11 audio: "Testa 7 dias grátis. Você cadastra o cartão..."
+  { type:'user', text:'Show, obrigado!', time:'19:51', at:69 },
+];
+
+let playing = false;
+
+function addMsg(type, text, time){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (type === 'user' ? 'me' : 'other');
+  const tick = type === 'user' ? '<span class="tick">✓✓</span>' : '';
+  div.innerHTML = text + '<span class="time">'+time+tick+'</span>';
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showTyping(){
+  const div = document.createElement('div');
+  div.className = 'msg other';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  status.textContent = 'digitando...';
+}
+function hideTyping(){
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+  status.textContent = 'online';
+}
+
+async function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function startDemo(){
+  if (playing) return;
+  playing = true;
+  resetDemo(false);
+  const t0 = Date.now();
+  const waitUntil = async (sec) => {
+    const target = t0 + sec * 1000;
+    const delta = target - Date.now();
+    if (delta > 0) await sleep(delta);
+  };
+  // cada step tem at (s absoluto) e opcional typingStart (s)
+  const actions = [];
+  for (const step of script){
+    if (step.type === 'bot' && step.typingStart != null){
+      actions.push({ at: step.typingStart, fn: showTyping });
+    }
+    actions.push({ at: step.at, fn: () => { hideTyping(); addMsg(step.type, step.text, step.time); } });
+  }
+  actions.sort((a,b) => a.at - b.at);
+  for (const a of actions){
+    await waitUntil(a.at);
+    a.fn();
+  }
+  playing = false;
+}
+
+function resetDemo(reflow = true){
+  chat.innerHTML = '<div class="sep">sexta-feira, 19:47</div>';
+  status.textContent = 'online';
+  if (reflow) playing = false;
+}
+</script>
+</body>
+</html>

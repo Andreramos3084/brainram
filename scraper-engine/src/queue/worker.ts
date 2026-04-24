@@ -7,7 +7,7 @@
 
 import { Worker } from 'bullmq';
 import { connection } from './queue.js';
-import { scrapeGoogleMaps } from '../scrapers/google-maps.js';
+import { scrapeGoogleMapsV2 } from '../scrapers/google-maps-v2.js';
 import { scrapeInstagram } from '../scrapers/instagram.js';
 import { analyzeWebsite } from '../scrapers/website-signals.js';
 import { saveLeads, saveEnrichment } from '../storage/supabase.js';
@@ -20,7 +20,7 @@ const scrapeWorker = new Worker(
     const { query, city, limit } = job.data;
     console.log(`🔍 [${job.id}] scrape ${query} @ ${city} (limit ${limit})`);
 
-    const leads = await scrapeGoogleMaps(query, city, limit, async (n, total) => {
+    const leads = await scrapeGoogleMapsV2(query, city, limit, async (n, total) => {
       await job.updateProgress({ current: n, total });
     });
 
