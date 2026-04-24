@@ -105,7 +105,33 @@ const RESPONSE_SCHEMA = {
   },
 };
 
+let instanceConnected: boolean | null = null;
+let lastConnectionCheck = 0;
+
+async function checkInstanceConnection(): Promise<boolean> {
+  try {
+    const r = await fetch(`${EVO_URL}/instance/connectionState/${EVO_INSTANCE}`, {
+      headers: { apikey: EVO_KEY },
+    });
+    if (!r.ok) return false;
+    const d = await r.json();
+    instanceConnected = d?.state === 'open' || d?.connectionStatus === 'open';
+    lastConnectionCheck = Date.now();
+    return instanceConnected;
+  } catch {
+    return false;
+  }
+}
+
 async function sendText(to: string, text: string) {
+  // Verifica conexão a cada 60s (cache)
+  if (Date.now() - lastConnectionCheck > 60000) {
+    const ok = await checkInstanceConnection();
+    if (!ok) {
+      console.error(`[EVO] Instância ${EVO_INSTANCE} desconectada. Mensagem NÃO enviada para ${to}`);
+      return;
+    }
+  }
   const r = await fetch(`${EVO_URL}/message/sendText/${EVO_INSTANCE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
@@ -115,6 +141,13 @@ async function sendText(to: string, text: string) {
 }
 
 async function sendMedia(to: string, url: string, caption: string, mediatype = 'video', mimetype = 'video/mp4', fileName = 'demo.mp4') {
+  if (Date.now() - lastConnectionCheck > 60000) {
+    const ok = await checkInstanceConnection();
+    if (!ok) {
+      console.error(`[EVO] Instância ${EVO_INSTANCE} desconectada. Mídia NÃO enviada para ${to}`);
+      return;
+    }
+  }
   const r = await fetch(`${EVO_URL}/message/sendMedia/${EVO_INSTANCE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
@@ -291,7 +324,10 @@ async function runTrialCheck(): Promise<{ prompted: number; cancelled: number }>
 
 const app = new Hono();
 
-app.get('/health', (c) => c.json({ ok: true, service: 'dfy-ia-sales' }));
+app.get('/health', async (c) => {
+  const evoOk = await checkInstanceConnection().catch(() => false);
+  return c.json({ ok: true, service: 'dfy-ia-sales', evolution: evoOk ? 'connected' : 'disconnected' });
+});
 
 // Endpoint manual pra disparar trial-check (pra cron externo OU validação)
 app.post('/admin/trial-check', async (c) => {
@@ -525,6 +561,10 @@ app.post('/mp/webhook', async (c) => {
 app.post('/sales/dispatch', async (c) => {
   const body = await c.req.json() as { phone: string; message: string; video?: boolean };
   const { phone, message, video = true } = body;
+  const connected = await checkInstanceConnection();
+  if (!connected) {
+    return c.json({ ok: false, error: `instância ${EVO_INSTANCE} desconectada` }, 503);
+  }
   await sendText(phone, message);
   if (video && DEMO_VIDEO_URL) {
     await new Promise(r => setTimeout(r, 3000));
