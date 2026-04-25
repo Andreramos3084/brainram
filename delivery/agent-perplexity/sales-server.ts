@@ -1,17 +1,18 @@
 /**
- * DFY-IA Sales Server — atende leads via WhatsApp Cloud API (Meta)
+ * DFY-IA Sales Server — atende leads via WhatsApp Cloud API (Meta) + Evolution API
  *
  * Endpoints:
  *   GET  /health
- *   GET  /sales/webhook    - Verificação do webhook Meta (challenge)
- *   POST /sales/webhook    - Recebe mensagens do lead via Meta webhook
- *   POST /mp/webhook       - Mercado Pago notifica eventos (auth/payment)
- *   POST /sales/dispatch   - chamada interna para disparar 1ª mensagem pro lead
+ *   GET  /sales/webhook         - Verificação do webhook Meta (challenge)
+ *   POST /sales/webhook         - Recebe mensagens do lead via Meta webhook
+ *   POST /sales/webhook/evolution - Recebe mensagens do lead via Evolution webhook
+ *   POST /mp/webhook            - Mercado Pago notifica eventos (auth/payment)
+ *   POST /sales/dispatch        - chamada interna para disparar 1ª mensagem pro lead
  *
  * Fluxo do lead:
  *   1. Scraper salva lead em `leads` (score, mensagem_cold, city)
  *   2. /sales/dispatch envia: mensagem personalizada + vídeo demo-final.mp4
- *   3. Lead responde via WhatsApp → /sales/webhook
+ *   3. Lead responde via WhatsApp → /sales/webhook (Meta) ou /sales/webhook/evolution
  *   4. Perplexity sonar decide: enviar checkout_link | agendar_call | continuar conversa | escalar
  *   5. Se enviou checkout_link e lead paga → /mp/webhook cria tenant + ativa trial
  *
@@ -19,6 +20,7 @@
  *   bun install; bun run sales-server.ts
  *   Env: PERPLEXITY_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
  *        WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_ACCESS_TOKEN, WHATSAPP_VERIFY_TOKEN,
+ *        EVOLUTION_URL, EVOLUTION_API_KEY, EVOLUTION_INSTANCE,
  *        MP_ACCESS_TOKEN, ADMIN_PHONE, DEMO_VIDEO_URL
  */
 import { createClient } from '@supabase/supabase-js';
@@ -28,14 +30,25 @@ import { mountAdmin, runCampaignTick } from './admin.js';
 const PPLX_KEY = process.env.PERPLEXITY_KEY!;
 const SUPA_URL = process.env.SUPABASE_URL!;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const WA_PHONE_ID = process.env.WHATSAPP_PHONE_NUMBER_ID!;
-const WA_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN!;
-const WA_VERIFY = process.env.WHATSAPP_VERIFY_TOKEN || 'brainram-verify-2026';
 const MP_TOKEN = process.env.MP_ACCESS_TOKEN!;
 const ADMIN_PHONE = process.env.ADMIN_PHONE || '5519998760212';
 const DEMO_VIDEO_URL = process.env.DEMO_VIDEO_URL || '';
 
-for (const [k, v] of Object.entries({ PPLX_KEY, SUPA_URL, SUPA_KEY, WA_PHONE_ID, WA_TOKEN, MP_TOKEN })) {
+// Provedores: Meta Cloud API (oficial) + Evolution (legado)
+const WA_PHONE_ID = process.env.WHATSAPP_PHONE_NUMBER_ID || '';
+const WA_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN || '';
+const WA_VERIFY = process.env.WHATSAPP_VERIFY_TOKEN || 'brainram-verify-2026';
+const HAS_META = !!(WA_PHONE_ID && WA_TOKEN);
+
+const EVO_URL = process.env.EVOLUTION_URL || '';
+const EVO_KEY = process.env.EVOLUTION_API_KEY || '';
+const EVO_INSTANCE = process.env.EVOLUTION_INSTANCE || 'outbound1';
+const HAS_EVO = !!(EVO_URL && EVO_KEY);
+
+// Provider default: meta, evolution, ou auto (tenta meta primeiro)
+const DEFAULT_PROVIDER = (process.env.DEFAULT_WHATSAPP_PROVIDER as 'meta' | 'evolution' | 'auto') || 'auto';
+
+for (const [k, v] of Object.entries({ PPLX_KEY, SUPA_URL, SUPA_KEY, MP_TOKEN })) {
   if (!v) throw new Error(`missing env: ${k}`);
 }
 
@@ -106,9 +119,10 @@ const RESPONSE_SCHEMA = {
   },
 };
 
-const WA_GRAPH_URL = `https://graph.facebook.com/v18.0/${WA_PHONE_ID}/messages`;
+const WA_GRAPH_URL = HAS_META ? `https://graph.facebook.com/v18.0/${WA_PHONE_ID}/messages` : '';
 
-async function sendText(to: string, text: string) {
+async function sendTextMeta(to: string, text: string) {
+  if (!HAS_META) throw new Error('Meta provider not configured');
   const body = {
     messaging_product: 'whatsapp',
     recipient_type: 'individual',
@@ -124,7 +138,8 @@ async function sendText(to: string, text: string) {
   if (!r.ok) console.error('whatsapp sendText failed', r.status, await r.text().catch(() => ''));
 }
 
-async function sendMedia(to: string, url: string, caption: string, mediaType = 'video') {
+async function sendMediaMeta(to: string, url: string, caption: string, mediaType = 'video') {
+  if (!HAS_META) throw new Error('Meta provider not configured');
   const typeKey = mediaType as 'video' | 'image' | 'document' | 'audio';
   const body: any = {
     messaging_product: 'whatsapp',
@@ -141,6 +156,49 @@ async function sendMedia(to: string, url: string, caption: string, mediaType = '
     body: JSON.stringify(body),
   });
   if (!r.ok) console.error('whatsapp sendMedia failed', r.status, await r.text().catch(() => ''));
+}
+
+async function sendTextEvolution(to: string, text: string) {
+  if (!HAS_EVO) throw new Error('Evolution provider not configured');
+  const r = await fetch(`${EVO_URL}/message/sendText/${EVO_INSTANCE}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
+    body: JSON.stringify({ number: to, text }),
+  });
+  if (!r.ok) console.error('evolution sendText failed', r.status, await r.text().catch(() => ''));
+}
+
+async function sendMediaEvolution(to: string, url: string, caption: string, mediaType = 'video') {
+  if (!HAS_EVO) throw new Error('Evolution provider not configured');
+  const r = await fetch(`${EVO_URL}/message/sendMedia/${EVO_INSTANCE}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
+    body: JSON.stringify({ number: to, mediatype: mediaType, mimetype: 'video/mp4', media: url, caption }),
+  });
+  if (!r.ok) console.error('evolution sendMedia failed', r.status, await r.text().catch(() => ''));
+}
+
+function resolveProvider(preferred?: 'meta' | 'evolution'): 'meta' | 'evolution' {
+  if (preferred) return preferred;
+  if (DEFAULT_PROVIDER === 'meta' && HAS_META) return 'meta';
+  if (DEFAULT_PROVIDER === 'evolution' && HAS_EVO) return 'evolution';
+  if (DEFAULT_PROVIDER === 'auto') {
+    if (HAS_META) return 'meta';
+    if (HAS_EVO) return 'evolution';
+  }
+  throw new Error('No WhatsApp provider available');
+}
+
+async function sendText(to: string, text: string, provider?: 'meta' | 'evolution') {
+  const p = resolveProvider(provider);
+  if (p === 'meta') return sendTextMeta(to, text);
+  return sendTextEvolution(to, text);
+}
+
+async function sendMedia(to: string, url: string, caption: string, mediaType = 'video', provider?: 'meta' | 'evolution') {
+  const p = resolveProvider(provider);
+  if (p === 'meta') return sendMediaMeta(to, url, caption, mediaType);
+  return sendMediaEvolution(to, url, caption, mediaType);
 }
 
 async function callPerplexity(history: Array<{ role: string; content: string }>, userText: string) {
@@ -181,7 +239,7 @@ async function callPerplexity(history: Array<{ role: string; content: string }>,
   }
 }
 
-async function executeAction(contact: string, action: string | null, args: any) {
+async function executeAction(contact: string, action: string | null, args: any, provider?: 'meta' | 'evolution') {
   if (!action) return;
   if (action === 'checkout_link') {
     const plan = args?.plan || 'starter';
@@ -196,16 +254,17 @@ async function executeAction(contact: string, action: string | null, args: any) 
     const ext = encodeURIComponent(contact);
     const linkWithRef = `${link}&external_reference=${ext}`;
     await sendText(contact,
-      `Plano ${plan.toUpperCase()} — R$${price}/mês.\n7 dias de teste grátis — se não gostar, pede reembolso dentro dos 7 dias e o valor volta integral.\n\n✅ Ativar teste: ${linkWithRef}\n📄 Contrato de adesão: ${contractMap[plan]}\n\nImportante: no 6º dia do teste te pergunto se você quer continuar. Se não responder CONTINUAR até o fim do 7º dia, a assinatura é cancelada automaticamente — sem cobrança.`
+      `Plano ${plan.toUpperCase()} — R$${price}/mês.\n7 dias de teste grátis — se não gostar, pede reembolso dentro dos 7 dias e o valor volta integral.\n\n✅ Ativar teste: ${linkWithRef}\n📄 Contrato de adesão: ${contractMap[plan]}\n\nImportante: no 6º dia do teste te pergunto se você quer continuar. Se não responder CONTINUAR até o fim do 7º dia, a assinatura é cancelada automaticamente — sem cobrança.`,
+      provider
     );
     return;
   }
   if (action === 'agendar_call') {
-    await sendText(ADMIN_PHONE, `📞 Lead quer atendimento pessoal\n\nContato: ${contact}\nHorários propostos: ${args?.horarios_propostos || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`);
+    await sendText(ADMIN_PHONE, `📞 Lead quer atendimento pessoal\n\nContato: ${contact}\nHorários propostos: ${args?.horarios_propostos || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`, provider);
     return;
   }
   if (action === 'escalar') {
-    await sendText(ADMIN_PHONE, `⚠️ Escalada\n\nContato: ${contact}\nMotivo: ${args?.motivo || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`);
+    await sendText(ADMIN_PHONE, `⚠️ Escalada\n\nContato: ${contact}\nMotivo: ${args?.motivo || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`, provider);
     return;
   }
 }
@@ -311,7 +370,15 @@ async function runTrialCheck(): Promise<{ prompted: number; cancelled: number }>
 
 const app = new Hono();
 
-app.get('/health', (c) => c.json({ ok: true, service: 'dfy-ia-sales', channel: 'whatsapp-cloud-api' }));
+app.get('/health', (c) => c.json({
+  ok: true,
+  service: 'dfy-ia-sales',
+  providers: {
+    meta: HAS_META ? 'configured' : 'not_configured',
+    evolution: HAS_EVO ? 'configured' : 'not_configured',
+  },
+  default: DEFAULT_PROVIDER,
+}));
 
 // Endpoint manual pra disparar trial-check (pra cron externo OU validação)
 app.post('/admin/trial-check', async (c) => {
@@ -456,7 +523,7 @@ app.get('/sales/webhook', (c) => {
   return c.json({ error: 'verification failed' }, 403);
 });
 
-// POST: mensagens do lead
+// POST: mensagens do lead via Meta
 app.post('/sales/webhook', async (c) => {
   const payload: any = await c.req.json().catch(() => ({}));
   // Ignora se não for evento de mensagens
@@ -494,10 +561,54 @@ app.post('/sales/webhook', async (c) => {
 
   const result = await callPerplexity(history || [], text);
   if (result.reply) {
-    await sendText(from, result.reply);
+    await sendText(from, result.reply, 'meta');
     await supabase.from('conversations').insert({ tenant_id: null, contact: from, role: 'assistant', content: result.reply });
   }
-  await executeAction(from, result.action || null, result.args || {});
+  await executeAction(from, result.action || null, result.args || {}, 'meta');
+  return c.json({ ok: true });
+});
+
+// === Evolution API webhook ===
+app.post('/sales/webhook/evolution', async (c) => {
+  const payload: any = await c.req.json().catch(() => ({}));
+  // Evolution usa event como string ou array
+  const event = payload.event;
+  if (event !== 'messages.upsert' && !(Array.isArray(event) && event.includes('messages.upsert'))) {
+    return c.json({ ok: true });
+  }
+  const msg = payload.data?.message;
+  if (!msg) return c.json({ ok: true });
+  // Ignora mensagens enviadas por nós
+  if (msg.fromMe) return c.json({ ok: true });
+  const from = msg.key?.remoteJid?.replace(/@s\.whatsapp\.net/, '') || msg.from;
+  const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text || msg.message?.imageMessage?.caption || '';
+  if (!from || !text) return c.json({ ok: true });
+
+  // marca lead como respondeu
+  await supabase.from('leads').update({ replied_at: new Date().toISOString() }).eq('phone', from);
+
+  // Short-circuit: trial intent
+  const intent = detectTrialIntent(text);
+  if (intent) {
+    await supabase.from('conversations').insert({ tenant_id: null, contact: from, role: 'user', content: text });
+    const handled = await handleTrialIntentForContact(from, intent);
+    if (handled) return c.json({ ok: true, trial_intent: intent });
+  }
+
+  const { data: history } = await supabase
+    .from('conversations')
+    .select('role, content')
+    .is('tenant_id', null).eq('contact', from)
+    .order('created_at', { ascending: true }).limit(20);
+
+  await supabase.from('conversations').insert({ tenant_id: null, contact: from, role: 'user', content: text });
+
+  const result = await callPerplexity(history || [], text);
+  if (result.reply) {
+    await sendText(from, result.reply, 'evolution');
+    await supabase.from('conversations').insert({ tenant_id: null, contact: from, role: 'assistant', content: result.reply });
+  }
+  await executeAction(from, result.action || null, result.args || {}, 'evolution');
   return c.json({ ok: true });
 });
 
@@ -560,13 +671,14 @@ app.post('/mp/webhook', async (c) => {
 });
 
 // === Dispatch: envia mensagem + vídeo pro lead ===
+// Body opcional: { provider: 'meta' | 'evolution' } — se omitido, usa DEFAULT_PROVIDER
 app.post('/sales/dispatch', async (c) => {
-  const body = await c.req.json() as { phone: string; message: string; video?: boolean };
-  const { phone, message, video = true } = body;
-  await sendText(phone, message);
+  const body = await c.req.json() as { phone: string; message: string; video?: boolean; provider?: 'meta' | 'evolution' };
+  const { phone, message, video = true, provider } = body;
+  await sendText(phone, message, provider);
   if (video && DEMO_VIDEO_URL) {
     await new Promise(r => setTimeout(r, 3000));
-    await sendMedia(phone, DEMO_VIDEO_URL, '', 'video');
+    await sendMedia(phone, DEMO_VIDEO_URL, '', 'video', provider);
   }
   await supabase.from('leads').update({ sent_at: new Date().toISOString() }).eq('phone', phone);
   return c.json({ ok: true });
@@ -576,7 +688,7 @@ app.post('/sales/dispatch', async (c) => {
 mountAdmin(app, {
   supabase,
   sendText,
-  sendMedia: (to: string, url: string, caption: string) => sendMedia(to, url, caption),
+  sendMedia: (to: string, url: string, caption: string, mediaType?: string, provider?: 'meta' | 'evolution') => sendMedia(to, url, caption, mediaType || 'video', provider),
   ADMIN_KEY: process.env.ADMIN_KEY || 'brainram-admin',
   SCRAPER_URL: process.env.SCRAPER_URL || 'https://api.dfy-ia.com.br',
   SCRAPER_KEY: process.env.SCRAPER_API_KEY || '',
