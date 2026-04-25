@@ -1,9 +1,10 @@
 /**
- * DFY-IA Sales Server — atende leads no número Clickmont (551151280116)
+ * DFY-IA Sales Server — atende leads via WhatsApp Cloud API (Meta)
  *
  * Endpoints:
  *   GET  /health
- *   POST /sales/webhook    - Evolution Clickmont recebe mensagem do lead
+ *   GET  /sales/webhook    - Verificação do webhook Meta (challenge)
+ *   POST /sales/webhook    - Recebe mensagens do lead via Meta webhook
  *   POST /mp/webhook       - Mercado Pago notifica eventos (auth/payment)
  *   POST /sales/dispatch   - chamada interna para disparar 1ª mensagem pro lead
  *
@@ -17,7 +18,7 @@
  * Deploy:
  *   bun install; bun run sales-server.ts
  *   Env: PERPLEXITY_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
- *        EVOLUTION_URL, EVOLUTION_API_KEY, EVOLUTION_INSTANCE (=Clickmont),
+ *        WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_ACCESS_TOKEN, WHATSAPP_VERIFY_TOKEN,
  *        MP_ACCESS_TOKEN, ADMIN_PHONE, DEMO_VIDEO_URL
  */
 import { createClient } from '@supabase/supabase-js';
@@ -27,14 +28,14 @@ import { mountAdmin, runCampaignTick } from './admin.js';
 const PPLX_KEY = process.env.PERPLEXITY_KEY!;
 const SUPA_URL = process.env.SUPABASE_URL!;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const EVO_URL = process.env.EVOLUTION_URL!;
-const EVO_KEY = process.env.EVOLUTION_API_KEY!;
-const EVO_INSTANCE = process.env.EVOLUTION_INSTANCE || 'outbound1';
+const WA_PHONE_ID = process.env.WHATSAPP_PHONE_NUMBER_ID!;
+const WA_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN!;
+const WA_VERIFY = process.env.WHATSAPP_VERIFY_TOKEN || 'brainram-verify-2026';
 const MP_TOKEN = process.env.MP_ACCESS_TOKEN!;
 const ADMIN_PHONE = process.env.ADMIN_PHONE || '5519998760212';
 const DEMO_VIDEO_URL = process.env.DEMO_VIDEO_URL || '';
 
-for (const [k, v] of Object.entries({ PPLX_KEY, SUPA_URL, SUPA_KEY, EVO_URL, EVO_KEY, MP_TOKEN })) {
+for (const [k, v] of Object.entries({ PPLX_KEY, SUPA_URL, SUPA_KEY, WA_PHONE_ID, WA_TOKEN, MP_TOKEN })) {
   if (!v) throw new Error(`missing env: ${k}`);
 }
 
@@ -105,55 +106,41 @@ const RESPONSE_SCHEMA = {
   },
 };
 
-let instanceConnected: boolean | null = null;
-let lastConnectionCheck = 0;
-
-async function checkInstanceConnection(): Promise<boolean> {
-  try {
-    const r = await fetch(`${EVO_URL}/instance/connectionState/${EVO_INSTANCE}`, {
-      headers: { apikey: EVO_KEY },
-    });
-    if (!r.ok) return false;
-    const d = await r.json();
-    instanceConnected = d?.state === 'open' || d?.connectionStatus === 'open';
-    lastConnectionCheck = Date.now();
-    return instanceConnected;
-  } catch {
-    return false;
-  }
-}
+const WA_GRAPH_URL = `https://graph.facebook.com/v18.0/${WA_PHONE_ID}/messages`;
 
 async function sendText(to: string, text: string) {
-  // Verifica conexão a cada 60s (cache)
-  if (Date.now() - lastConnectionCheck > 60000) {
-    const ok = await checkInstanceConnection();
-    if (!ok) {
-      console.error(`[EVO] Instância ${EVO_INSTANCE} desconectada. Mensagem NÃO enviada para ${to}`);
-      return;
-    }
-  }
-  const r = await fetch(`${EVO_URL}/message/sendText/${EVO_INSTANCE}`, {
+  const body = {
+    messaging_product: 'whatsapp',
+    recipient_type: 'individual',
+    to: to.replace(/\D/g, ''),
+    type: 'text',
+    text: { body: text },
+  };
+  const r = await fetch(WA_GRAPH_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
-    body: JSON.stringify({ number: to, text }),
+    headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  if (!r.ok) console.error('evolution sendText failed', r.status, await r.text().catch(() => ''));
+  if (!r.ok) console.error('whatsapp sendText failed', r.status, await r.text().catch(() => ''));
 }
 
-async function sendMedia(to: string, url: string, caption: string, mediatype = 'video', mimetype = 'video/mp4', fileName = 'demo.mp4') {
-  if (Date.now() - lastConnectionCheck > 60000) {
-    const ok = await checkInstanceConnection();
-    if (!ok) {
-      console.error(`[EVO] Instância ${EVO_INSTANCE} desconectada. Mídia NÃO enviada para ${to}`);
-      return;
-    }
-  }
-  const r = await fetch(`${EVO_URL}/message/sendMedia/${EVO_INSTANCE}`, {
+async function sendMedia(to: string, url: string, caption: string, mediaType = 'video') {
+  const typeKey = mediaType as 'video' | 'image' | 'document' | 'audio';
+  const body: any = {
+    messaging_product: 'whatsapp',
+    to: to.replace(/\D/g, ''),
+    type: typeKey,
+  };
+  if (typeKey === 'video') body.video = { link: url, caption };
+  else if (typeKey === 'image') body.image = { link: url, caption };
+  else if (typeKey === 'document') body.document = { link: url, caption, filename: 'arquivo.pdf' };
+  else body[typeKey] = { link: url };
+  const r = await fetch(WA_GRAPH_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
-    body: JSON.stringify({ number: to, mediatype, mimetype, media: url, caption, fileName }),
+    headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  if (!r.ok) console.error('evolution sendMedia failed', r.status, await r.text().catch(() => ''));
+  if (!r.ok) console.error('whatsapp sendMedia failed', r.status, await r.text().catch(() => ''));
 }
 
 async function callPerplexity(history: Array<{ role: string; content: string }>, userText: string) {
@@ -324,10 +311,7 @@ async function runTrialCheck(): Promise<{ prompted: number; cancelled: number }>
 
 const app = new Hono();
 
-app.get('/health', async (c) => {
-  const evoOk = await checkInstanceConnection().catch(() => false);
-  return c.json({ ok: true, service: 'dfy-ia-sales', evolution: evoOk ? 'connected' : 'disconnected' });
-});
+app.get('/health', (c) => c.json({ ok: true, service: 'dfy-ia-sales', channel: 'whatsapp-cloud-api' }));
 
 // Endpoint manual pra disparar trial-check (pra cron externo OU validação)
 app.post('/admin/trial-check', async (c) => {
@@ -460,14 +444,32 @@ a{color:#22c55e;text-decoration:none}
 </body></html>`);
 });
 
-// === Evolution webhook: mensagem do lead chega aqui ===
+// === Meta WhatsApp Cloud API webhook ===
+// GET: verificação do webhook
+app.get('/sales/webhook', (c) => {
+  const mode = c.req.query('hub.mode');
+  const token = c.req.query('hub.verify_token');
+  const challenge = c.req.query('hub.challenge');
+  if (mode === 'subscribe' && token === WA_VERIFY) {
+    return c.text(challenge || '');
+  }
+  return c.json({ error: 'verification failed' }, 403);
+});
+
+// POST: mensagens do lead
 app.post('/sales/webhook', async (c) => {
   const payload: any = await c.req.json().catch(() => ({}));
-  if (payload.event !== 'messages.upsert') return c.json({ ok: true });
-  const msg = payload.data;
-  if (msg?.key?.fromMe) return c.json({ ok: true });
-  const from = (msg?.key?.remoteJid || '').replace('@s.whatsapp.net', '');
-  const text = msg?.message?.conversation || msg?.message?.extendedTextMessage?.text;
+  // Ignora se não for evento de mensagens
+  if (payload.object !== 'whatsapp_business_account') return c.json({ ok: true });
+  const entry = payload.entry?.[0];
+  const change = entry?.changes?.[0];
+  const value = change?.value;
+  const msg = value?.messages?.[0];
+  if (!msg) return c.json({ ok: true });
+  // Ignora mensagens enviadas por nós
+  if (msg.fromMe) return c.json({ ok: true });
+  const from = msg.from;
+  const text = msg.text?.body || msg.image?.caption || '';
   if (!from || !text) return c.json({ ok: true });
 
   // marca lead como respondeu
@@ -561,14 +563,10 @@ app.post('/mp/webhook', async (c) => {
 app.post('/sales/dispatch', async (c) => {
   const body = await c.req.json() as { phone: string; message: string; video?: boolean };
   const { phone, message, video = true } = body;
-  const connected = await checkInstanceConnection();
-  if (!connected) {
-    return c.json({ ok: false, error: `instância ${EVO_INSTANCE} desconectada` }, 503);
-  }
   await sendText(phone, message);
   if (video && DEMO_VIDEO_URL) {
     await new Promise(r => setTimeout(r, 3000));
-    await sendMedia(phone, DEMO_VIDEO_URL, '', 'video', 'video/mp4', 'demo-dfy-ia.mp4');
+    await sendMedia(phone, DEMO_VIDEO_URL, '', 'video');
   }
   await supabase.from('leads').update({ sent_at: new Date().toISOString() }).eq('phone', phone);
   return c.json({ ok: true });
