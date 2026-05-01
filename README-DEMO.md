@@ -31,3 +31,31 @@
 2. 🔧 Resolver email (verificar domínio Resend)
 3. 🚀 Disparar próxima leva de 53 leads via WhatsApp
 4. 📧 Enviar email para 12 leads
+
+---
+
+## ✅ Email Campanha Multi-Nicho — COMPLETO (2026-05-01)
+
+**12 emails enviados com sucesso via Resend**
+- Domínio: `brainram.com.br` ✅ verificado
+- From: `BrainRam <contato@brainram.com.br>`
+- Taxa de sucesso: **12/12 = 100%**
+- Nichos alcançados: Laboratório (2), Centro de Imagem (5), Estética (2), Quiropraxia (3)
+
+### Leads contactados por email:
+| # | Lead | Cidade | Nicho |
+|---|------|--------|-------|
+| 1 | Laboratório Geraldo Lustosa | Belo Horizonte | Laboratório |
+| 2 | Vicenlab Análises Clínicas | Curitiba | Laboratório |
+| 3 | Diagmed - Clínica da Mulher | Campinas | Centro de Imagem |
+| 4 | Clínica Tomocenter | Belo Horizonte | Centro de Imagem |
+| 5 | Primamed | Curitiba | Centro de Imagem |
+| 6 | Hospital XV | Curitiba | Centro de Imagem |
+| 7 | Hospital Vita (Batel) | Curitiba | Centro de Imagem |
+| 8 | Giuliana Milena Estética | Campinas | Estética |
+| 9 | Instituto da Dor | São Paulo | Quiropraxia |
+| 10 | Coluna Prime Quiropraxia | Porto Alegre | Quiropraxia |
+| 11 | Bendita Coluna | Brasília | Quiropraxia |
+| 12 | Clínica Estética Curitiba | Curitiba | Estética |
+
+**Resend IDs:** `771dc5bb...`, `9c3db65e...`, `d6bc4a5f...`, `c3cb3d80...`, `c452d27a...`, `da50803a...`, `e9b3134f...`, `2b616c04...`, `5397a2a7...`, `d406ad14...`, `14d87eb0...`, `5b072d68...`
