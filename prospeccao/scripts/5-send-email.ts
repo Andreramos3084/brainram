@@ -26,8 +26,10 @@ function subject(lead: any) {
 
 function body(lead: any) {
   const msg = (lead.mensagem_cold || '').replace(/\n/g, '<br>');
+  const videoUrl = 'https://nlcmhqevxpdttuhamjsj.supabase.co/storage/v1/object/public/public-assets/brainram-demo-2min.mp4';
   return `<!doctype html><html><body style="font-family:system-ui,-apple-system,sans-serif;max-width:560px;margin:0 auto;padding:20px;color:#222;line-height:1.55">
 <p>${msg}</p>
+<p style="margin-top:20px"><a href="${videoUrl}" style="display:inline-block;background:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600">🎬 Assista o vídeo de 2 min</a></p>
 <p style="margin-top:24px;font-size:14px;color:#555">Se preferir falar no WhatsApp, é só responder este email ou chamar em <a href="https://wa.me/5519998760212">wa.me/5519998760212</a>.</p>
 <hr style="border:none;border-top:1px solid #eee;margin:24px 0">
 <p style="font-size:12px;color:#888">BrainRam — atendente IA WhatsApp pra clínicas · Pirassununga/SP<br>
