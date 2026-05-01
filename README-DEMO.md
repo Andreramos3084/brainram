@@ -59,3 +59,44 @@
 | 12 | Clínica Estética Curitiba | Curitiba | Estética |
 
 **Resend IDs:** `771dc5bb...`, `9c3db65e...`, `d6bc4a5f...`, `c3cb3d80...`, `c452d27a...`, `da50803a...`, `e9b3134f...`, `2b616c04...`, `5397a2a7...`, `d406ad14...`, `14d87eb0...`, `5b072d68...`
+
+---
+
+## 🚀 Campanha Celulares + Email Agressivo (2026-05-01)
+
+### WhatsApp - Leads com Celulares
+- **10 leads** com celulares validados (90% taxa sucesso esperada)
+- Script: `/tmp/send-whatsapp-celulares.sh`
+- Log: `/tmp/whatsapp-celulares.log`
+- Delay: 2-4 min entre envios
+- Estimativa: ~30 min para completar
+
+Leads:
+| # | Clínica | Cidade | Nicho | Celular |
+|---|---------|--------|-------|---------|
+| 1 | Consulta Carioca | Rio de Janeiro | Laboratório | 21969162030 |
+| 2 | Clínica Tomocenter | Belo Horizonte | Centro Imagem | 31994499441 |
+| 3 | CEDO | Curitiba | Centro Imagem | 41996839711 |
+| 4 | CDI PR | Curitiba | Centro Imagem | 41991850481 |
+| 5 | Cemcor Cardiologia | Porto Alegre | Cardiologia | 51989352905 |
+| 6 | Incordis | Brasília | Cardiologia | 61986252954 |
+| 7 | Cardiosul | Brasília | Cardiologia | 61986129831 |
+| 8 | IDC Brasília | Brasília | Cardiologia | 61996270787 |
+| 9 | BH Centro Diagnóstico | Belo Horizonte | Centro Imagem | 31996022782 |
+| 10 | Perfeccionare Estética | Florianópolis | Estética | 48999915629 |
+
+### Email Agressivo - Leads com Fixo
+- **11 leads** com copy agressiva mencionando dificuldade de contato
+- Log: `/tmp/email-agressivo.log`
+- Copy: `/tmp/copy-agressiva-email.md`
+- Subject: "Tentamos ligar pra você hoje..."
+
+### Problema Resolvido: Webhook
+- Webhook da instância `brainram.com.br` reconfigurado com `tenant_id`
+- Modelo Claude atualizado: `claude-3-5-sonnet-latest`
+- Instância agent atualizada: `brainram.com.br`
+
+### Problema Pendente: API Key Anthropic
+- **A API key do Anthropic é um placeholder** (`sk-ant-REPLACE-COM-SUA-KEY`)
+- O edge function não consegue gerar respostas sem key válida
+- **Ação necessária:** fornecer API key real do Anthropic para ativar o agente
