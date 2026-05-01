@@ -1,0 +1,10 @@
+project_id = "nlcmhqevxpdttuhamjsj"
+
+[functions.agent-handler]
+verify_jwt = false
+
+[functions.agent-handler-cached]
+verify_jwt = false
+
+[functions.onboard-client]
+verify_jwt = false

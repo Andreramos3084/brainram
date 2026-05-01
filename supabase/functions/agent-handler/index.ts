@@ -2,12 +2,11 @@
  * Supabase Edge Function — agent-handler
  *
  * Recebe mensagem do WhatsApp via webhook Evolution,
- * processa com Claude, responde.
+ * processa com Perplexity AI, responde.
  */
 
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import Anthropic from 'npm:@anthropic-ai/sdk@0.30.0';
 import { getAvailability, bookAppointment } from '../_shared/google-calendar.ts';
 import { parseWebhook, sendMessage } from '../_shared/whatsapp.ts';
 
@@ -15,36 +14,8 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_URL')!,
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
 );
-const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY')! });
+const PERPLEXITY_KEY = Deno.env.get('PERPLEXITY_API_KEY') || Deno.env.get('PERPLEXITY_KEY') || '';
 const WA_VERIFY = Deno.env.get('WHATSAPP_VERIFY_TOKEN') || 'brainram-verify-2026';
-
-const TOOLS = [
-  {
-    name: 'consultar_disponibilidade',
-    description: 'Consulta horários livres no Google Calendar',
-    input_schema: { type: 'object', properties: { data_inicio: { type: 'string' } }, required: [] },
-  },
-  {
-    name: 'agendar',
-    description: 'Cria evento no Google Calendar',
-    input_schema: {
-      type: 'object',
-      properties: {
-        servico: { type: 'string' },
-        data: { type: 'string' },
-        hora: { type: 'string' },
-        nome_paciente: { type: 'string' },
-        telefone: { type: 'string' },
-      },
-      required: ['servico', 'data', 'hora', 'nome_paciente'],
-    },
-  },
-  {
-    name: 'escalar',
-    description: 'Escala para humano',
-    input_schema: { type: 'object', properties: { motivo: { type: 'string' }, prioridade: { type: 'string' } }, required: ['motivo'] },
-  },
-];
 
 function todayISO(): string {
   const d = new Date();
@@ -149,7 +120,102 @@ async function processTool(tenantId: string, name: string, args: any): Promise<s
   return 'ok';
 }
 
+// ─── Perplexity API call (OpenAI-compatible) ───
+
+async function callPerplexity(systemPrompt: string, messages: any[], model: string = 'sonar-pro'): Promise<{ text: string; toolCalls: Array<{ name: string; args: any }> }> {
+  if (!PERPLEXITY_KEY) {
+    throw new Error('PERPLEXITY_API_KEY not configured');
+  }
+
+  // Build tool instructions appended to system prompt
+  const toolInstructions = `
+
+=== FERRAMENTAS DISPONÍVEIS ===
+Você pode usar as seguintes ferramentas quando necessário. Para chamar uma ferramenta, responda APENAS com um JSON no formato:
+{"tool": "NOME_DA_FERRAMENTA", "args": { ... }}
+
+Ferramentas:
+1. consultar_disponibilidade - Consulta horários livres no Google Calendar
+   Args: { "data_inicio": "YYYY-MM-DD" } (opcional, padrão: hoje)
+
+2. agendar - Cria evento no Google Calendar
+   Args: { "servico": "string", "data": "YYYY-MM-DD", "hora": "HH:MM", "nome_paciente": "string", "telefone": "string" }
+
+3. escalar - Escala para atendimento humano
+   Args: { "motivo": "string", "prioridade": "string" }
+
+Regras:
+- Se o paciente quiser agendar, use a ferramenta "agendar" com os dados necessários.
+- Se o paciente quiser saber horários livres, use "consultar_disponibilidade".
+- Se for urgência ou caso complexo, use "escalar".
+- Se não precisar de ferramenta, responda normalmente em português, como numa conversa de WhatsApp.
+- Mensagens curtas: máximo 4 linhas. 1 emoji por mensagem.`;
+
+  // Build messages ensuring user/assistant alternation (Perplexity requirement)
+  const rawMessages = messages.map((m: any) => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: m.content,
+  }));
+
+  // Merge consecutive messages with same role
+  const mergedMessages: any[] = [];
+  for (const msg of rawMessages) {
+    if (mergedMessages.length > 0 && mergedMessages[mergedMessages.length - 1].role === msg.role) {
+      mergedMessages[mergedMessages.length - 1].content += '\n\n' + msg.content;
+    } else {
+      mergedMessages.push({ ...msg });
+    }
+  }
+
+  const openaiMessages = [
+    { role: 'system', content: systemPrompt + toolInstructions },
+    ...mergedMessages,
+  ];
+
+  const r = await fetch('https://api.perplexity.ai/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${PERPLEXITY_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: model === 'claude-3-5-sonnet-latest' ? 'sonar-pro' : model,
+      messages: openaiMessages,
+      max_tokens: 800,
+      temperature: 0.3,
+    }),
+  });
+
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Perplexity API error ${r.status}: ${err}`);
+  }
+
+  const data = await r.json();
+  const content = data.choices?.[0]?.message?.content || '';
+
+  // Try to parse tool call from JSON
+  let toolCalls: Array<{ name: string; args: any }> = [];
+  let text = content;
+
+  try {
+    const trimmed = content.trim();
+    if (trimmed.startsWith('{') && trimmed.includes('"tool"')) {
+      const parsed = JSON.parse(trimmed);
+      if (parsed.tool) {
+        toolCalls.push({ name: parsed.tool, args: parsed.args || {} });
+        text = '';
+      }
+    }
+  } catch {
+    // Not a tool call, treat as regular text
+  }
+
+  return { text, toolCalls };
+}
+
 serve(async (req) => {
+  try {
   const url = new URL(req.url);
   const tenantId = url.searchParams.get('tenant_id');
   if (!tenantId) return new Response('missing tenant_id', { status: 400 });
@@ -195,37 +261,22 @@ serve(async (req) => {
   // Save user message
   await supabase.from('conversations').insert({ tenant_id: tenantId, contact: from, role: 'user', content: text });
 
-  // Call Claude
-  const res = await anthropic.messages.create({
-    model: agent.model,
-    max_tokens: 500,
-    system: agent.system_prompt,
-    tools: TOOLS,
-    messages,
-  });
+  // Call Perplexity
+  const res = await callPerplexity(agent.system_prompt, messages, agent.model);
 
-  // Handle tool_use
-  let responseText = '';
-  for (const block of res.content) {
-    if (block.type === 'text') responseText += block.text;
-    if (block.type === 'tool_use') {
-      const toolResult = await processTool(tenantId, block.name, block.input);
-      messages.push({ role: 'user', content: `[Resultado da ferramenta ${block.name}]: ${toolResult}` });
-    }
+  // Handle tool calls
+  let responseText = res.text;
+
+  for (const tc of res.toolCalls) {
+    const toolResult = await processTool(tenantId, tc.name, tc.args);
+    messages.push({ role: 'assistant', content: JSON.stringify({ tool: tc.name, args: tc.args }) });
+    messages.push({ role: 'user', content: `[Resultado da ferramenta ${tc.name}]: ${toolResult}` });
   }
 
-  // Se processou tool e não tem responseText, pede resposta final ao Claude
-  const hadToolUse = res.content.some((b: any) => b.type === 'tool_use');
-  if (hadToolUse && !responseText) {
-    const followUp = await anthropic.messages.create({
-      model: agent.model,
-      max_tokens: 500,
-      system: agent.system_prompt,
-      messages,
-    });
-    for (const block of followUp.content) {
-      if (block.type === 'text') responseText += block.text;
-    }
+  // If we had tool calls, ask Perplexity for final response
+  if (res.toolCalls.length > 0 && !responseText) {
+    const followUp = await callPerplexity(agent.system_prompt, messages, agent.model);
+    responseText = followUp.text;
   }
 
   if (responseText) {
@@ -237,4 +288,8 @@ serve(async (req) => {
   }
 
   return Response.json({ ok: true });
+  } catch (err: any) {
+    console.error('Edge function error:', err);
+    return Response.json({ error: err.message, stack: err.stack }, { status: 500 });
+  }
 });
