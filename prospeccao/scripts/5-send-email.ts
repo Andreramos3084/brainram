@@ -72,9 +72,3 @@ async function main() {
   console.log('\n🏁 done');
 }
 main().catch(console.error);
-
-    await new Promise(r => setTimeout(r, 15000 + Math.random() * 15000));
-  }
-  console.log('\n🏁 done');
-}
-main().catch(console.error);

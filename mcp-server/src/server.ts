@@ -8,9 +8,7 @@
  *   - dfy_prospect: roda pipeline prospecção
  *   - dfy_send_outbound: dispara lote de outbound
  *   - dfy_list_leads: lista leads por status
- *   - dfy_onboard: onboarding manual de cliente
  *   - dfy_metrics: dashboard resumido
- *   - dfy_generate_content: gera post diário
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -71,15 +69,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       description: 'Dashboard rápido: envios hoje, respostas, calls agendadas, MRR.',
       inputSchema: { type: 'object', properties: {} },
     },
-    {
-      name: 'dfy_generate_content',
-      description: 'Gera conteúdo diário (reel/post/carrossel) para Instagram da marca.',
-      inputSchema: {
-        type: 'object',
-        properties: { type: { enum: ['reel', 'post', 'carrossel'] } },
-        required: ['type'],
-      },
-    },
+
   ],
 }));
 
@@ -135,10 +125,6 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
         sent = lines.filter((l) => l.includes(today) && l.includes('"sent"')).length;
       } catch {}
       return { content: [{ type: 'text', text: `📊 Envios hoje: ${sent}\n⏳ resposta/call/MRR: conectar Supabase` }] };
-    }
-
-    if (name === 'dfy_generate_content') {
-      return { content: [{ type: 'text', text: `Gerador ${args.type} — stub, implementar com Claude + Imagen` }] };
     }
 
     return { content: [{ type: 'text', text: `tool desconhecida: ${name}` }], isError: true };

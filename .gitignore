@@ -9,7 +9,12 @@ build/
 prospeccao/data/*.json
 !prospeccao/data/.gitkeep
 marketing/output/
+marketing/video-demo/build/
 .vercel/
 .turbo/
 *.bak
 .cloudflared/
+.claude/
+supabase/.temp/
+.auto-save.log
+.auto-save.pid

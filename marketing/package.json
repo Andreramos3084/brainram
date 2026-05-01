@@ -1,0 +1,16 @@
+{
+  "name": "brainram-marketing",
+  "version": "1.0.0",
+  "description": "Content factory e asset management para BrainRam",
+  "scripts": {
+    "generate": "bun run scripts/generate-daily.ts",
+    "upload": "bun run scripts/upload-assets.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
+}

@@ -21,7 +21,7 @@ echo "Nicho: $QUERY | Cidade: $CITY | Limite: $LIMIT"
 echo
 
 echo "🔍 [1/4] Scraping..."
-bun run scripts/1-scrape.ts "$QUERY" "$CITY" "$LIMIT"
+bun run scripts/1-scrape-v2.ts "$QUERY" "$CITY" "$LIMIT"
 
 echo
 echo "🔬 [2/4] Enriquecimento..."
@@ -29,7 +29,7 @@ bun run scripts/2-enrich.ts "$RAW"
 
 echo
 echo "🎯 [3/4] Scoring..."
-bun run scripts/3-score.ts "$ENR"
+bun run scripts/3-score-pplx-v2.ts "$RAW"
 
 echo
 echo "📤 [4/4] Envio ${SEND_FLAG:-(dry-run)}..."
