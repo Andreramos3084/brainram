@@ -673,6 +673,8 @@ app.post('/mp/webhook', async (c) => {
 // === Dispatch: envia mensagem + vídeo pro lead ===
 // Body opcional: { provider: 'meta' | 'evolution' } — se omitido, usa DEFAULT_PROVIDER
 app.post('/sales/dispatch', async (c) => {
+  const key = c.req.header('x-admin-key');
+  if (key !== (process.env.ADMIN_KEY || 'brainram-admin')) return c.json({ error: 'unauthorized' }, 401);
   const body = await c.req.json() as { phone: string; message: string; video?: boolean; provider?: 'meta' | 'evolution' };
   const { phone, message, video = true, provider } = body;
   await sendText(phone, message, provider);
