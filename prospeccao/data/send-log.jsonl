@@ -59,3 +59,5 @@
 {"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Corporal","phone":"5541301952","instance":"brainram.com.br"}
 {"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Oligoflora Curitiba","phone":"5541309523","instance":"brainram.com.br"}
 {"ts":"2026-05-01T13:25:37.354Z","type":"error","lead":"Camp Imagem","phone":"551937341100","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"551937341100@s.whatsapp.net\",\"exists\":false,\"number\":\"551937341100\"}]}}"}
+{"ts":"2026-05-01T13:27:59.685Z","type":"sent","lead":"Bianchessi","phone":"551935194580","instance":"brainram.com.br","ok":true,"id":"3EB0C61008FBB55526457E"}
+{"ts":"2026-05-01T13:30:25.003Z","type":"error","lead":"Hermes Pardini","phone":"5531322862","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"5531322862@s.whatsapp.net\",\"exists\":false,\"number\":\"5531322862\"}]}}"}

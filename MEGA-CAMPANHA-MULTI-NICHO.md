@@ -75,3 +75,44 @@ bash /tmp/send-email-multi.sh --send
 2. ⏳ Resolver email e disparar para os 8 leads
 3. ⏳ Gerar mais leads multi-nicho (meta: 200+ leads)
 4. ⏳ Aquecer número WhatsApp por 7-14 dias antes de escalar
+
+---
+
+## 📧 Status do Email
+
+**Bloqueio:** Resend em modo testing
+**Impacto:** 12 leads com email prontos, não enviados
+
+### Soluções disponíveis:
+
+#### Opção A: Verificar domínio no Resend (5 min)
+1. Acesse https://resend.com/domains
+2. Adicione `brainram.com.br` (ou outro domínio)
+3. Configure DNS conforme instruções
+4. Aguarde verificação (~5 min)
+5. Atualize `FROM_EMAIL` no .env
+
+#### Opção B: API key de produção Resend
+1. Dashboard Resend → API Keys → Create Production Key
+2. Substitua no .env
+
+#### Opção C: SMTP do Hostinger (se tiver email lá)
+```bash
+# Adicionar ao .env
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=587
+SMTP_USER=seu-email@seu-dominio.com
+SMTP_PASS=sua-senha
+```
+
+---
+
+## 📊 Leads Totais Disponíveis
+
+| Canal | Quantidade | Nichos |
+|-------|-----------|--------|
+| WhatsApp | 53 | Lab, Imagem, Cardio, Quiro, Estética |
+| Email | 12 | Lab, Imagem, Quiro, Estética |
+| WhatsApp (campanha atual) | 24 | Lab, Imagem, Cardio, Quiro, Estética |
+
+**Total acumulado:** 160 leads multi-nicho
