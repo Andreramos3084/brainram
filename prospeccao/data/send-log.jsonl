@@ -17,3 +17,8 @@
 {"ts":"2026-05-01T12:25:03.294Z","type":"dry_run","lead":"OdontoCompany Limeira","phone":"5519982095544","instance":"brainram.com.br"}
 {"ts":"2026-05-01T12:25:03.294Z","type":"dry_run","lead":"Odontologia e Harmonização Facial - Clínica Especializada","phone":"5519988053318","instance":"brainram.com.br"}
 {"ts":"2026-05-01T12:25:23.280Z","type":"sent","lead":"Consultório Odontológico Dra. Juliana Rampim | Dentista em Limeira","phone":"5519971539461","instance":"brainram.com.br","ok":true,"id":"3EB0DE467CBFA2524308B1"}
+{"ts":"2026-05-01T12:29:22.502Z","type":"sent","lead":"Elo Oral Clinic - Odontologia","phone":"5519999143659","instance":"brainram.com.br","ok":true,"id":"3EB00FA49F7B67A88BFAD6"}
+{"ts":"2026-05-01T12:32:56.886Z","type":"sent","lead":"Ello Próteses e Implantes","phone":"5519997166254","instance":"brainram.com.br","ok":true,"id":"3EB0FBE3F2A375DB2751AF"}
+{"ts":"2026-05-01T12:36:31.839Z","type":"error","lead":"Oral Unic Implantes Piracicaba","phone":"551930580050","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"551930580050@s.whatsapp.net\",\"exists\":false,\"number\":\"551930580050\"}]}}"}
+{"ts":"2026-05-01T12:39:20.070Z","type":"sent","lead":"Clínica Integrada Odontológica Uniodonto Piracicaba","phone":"551934011787","instance":"brainram.com.br","ok":true,"id":"3EB0DF4179E02960E71971"}
+{"ts":"2026-05-01T12:42:04.033Z","type":"sent","lead":"Dentistas Piracicaba Pro Dente","phone":"5519999086442","instance":"brainram.com.br","ok":true,"id":"3EB0CEE6FF52AE58B33562"}
