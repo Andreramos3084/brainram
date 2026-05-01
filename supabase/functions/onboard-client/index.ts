@@ -60,7 +60,7 @@ async function generateAgentPrompt(data: Record<string, any>): Promise<string> {
   ).then((r) => r.text()).catch(() => '');
 
   const res = await anthropic.messages.create({
-    model: 'claude-sonnet-4-7',
+    model: 'claude-3-5-sonnet-latest',
     max_tokens: 4000,
     system:
       'Você preenche o template do agente WhatsApp com os dados do cliente. Retorne APENAS o prompt final, pronto para uso, com todos os {{slots}} substituídos.',
@@ -100,7 +100,7 @@ serve(async (req) => {
   await supabase.from('agents').insert({
     tenant_id: tenant.id,
     system_prompt: systemPrompt,
-    model: 'claude-sonnet-4-7',
+    model: 'claude-3-5-sonnet-latest',
     evolution_instance: instName,
   });
 

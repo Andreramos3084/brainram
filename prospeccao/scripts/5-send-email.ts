@@ -3,7 +3,13 @@
  * Uso: bun run 5-send-email.ts <scored-with-email.json> [--send]
  * Env: RESEND_API_KEY, FROM_EMAIL (opt, default onboarding@resend.dev)
  */
-import { readFileSync, appendFileSync, existsSync, writeFileSync } from 'node:fs';
+import { readFileSync, appendFileSync, existsSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
+
+function ensureDir(filePath: string) {
+  const dir = dirname(filePath);
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+}
 
 const KEY = process.env.RESEND_API_KEY!;
 const FROM = process.env.FROM_EMAIL || 'BrainRam <onboarding@resend.dev>';

@@ -195,7 +195,7 @@ serve(async (req) => {
   // 🔑 CACHE: system prompt marcado como cacheable.
   // Cobra full só primeira vez; próximas 5min pagam 10% nesses tokens.
   const res = await anthropic.messages.create({
-    model: agent.model || 'claude-sonnet-4-5',
+    model: agent.model || 'claude-3-5-sonnet-latest',
     max_tokens: 500,
     system: [
       {
@@ -228,7 +228,7 @@ serve(async (req) => {
   const hadToolUse = res.content.some((b: any) => b.type === 'tool_use');
   if (hadToolUse && !responseText) {
     const followUp = await anthropic.messages.create({
-      model: agent.model || 'claude-sonnet-4-5',
+      model: agent.model || 'claude-3-5-sonnet-latest',
       max_tokens: 500,
       system: [
         { type: 'text', text: agent.system_prompt, cache_control: { type: 'ephemeral' } },

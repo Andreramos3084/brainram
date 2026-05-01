@@ -63,7 +63,7 @@ Retorne JSON:
 Só JSON, sem preamble.`;
 
   const res = await anthropic.messages.create({
-    model: 'claude-haiku-4-5',
+    model: 'claude-3-haiku-latest',
     max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }],
   });
