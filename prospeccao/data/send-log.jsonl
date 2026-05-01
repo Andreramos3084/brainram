@@ -22,3 +22,40 @@
 {"ts":"2026-05-01T12:36:31.839Z","type":"error","lead":"Oral Unic Implantes Piracicaba","phone":"551930580050","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"551930580050@s.whatsapp.net\",\"exists\":false,\"number\":\"551930580050\"}]}}"}
 {"ts":"2026-05-01T12:39:20.070Z","type":"sent","lead":"Clínica Integrada Odontológica Uniodonto Piracicaba","phone":"551934011787","instance":"brainram.com.br","ok":true,"id":"3EB0DF4179E02960E71971"}
 {"ts":"2026-05-01T12:42:04.033Z","type":"sent","lead":"Dentistas Piracicaba Pro Dente","phone":"5519999086442","instance":"brainram.com.br","ok":true,"id":"3EB0CEE6FF52AE58B33562"}
+{"ts":"2026-05-01T12:45:16.590Z","type":"sent","lead":"Dr Angelo Secco","phone":"5519997842255","instance":"brainram.com.br","ok":true,"id":"3EB0E94BC6352A0F5EE925"}
+{"ts":"2026-05-01T12:49:07.788Z","type":"sent","lead":"Odontologia SrDent","phone":"5519997488385","instance":"brainram.com.br","ok":true,"id":"3EB0998A305EC598F95EFE"}
+{"ts":"2026-05-01T12:53:04.878Z","type":"error","lead":"Oral Unic Implantes Rio Claro","phone":"551935338080","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"551935338080@s.whatsapp.net\",\"exists\":false,\"number\":\"551935338080\"}]}}"}
+{"ts":"2026-05-01T12:55:17.333Z","type":"sent","lead":"Bellotto Corrêa & Equipe - Odontologia Integrada","phone":"5519996704748","instance":"brainram.com.br","ok":true,"id":"3EB012219E951F0251DF19"}
+{"ts":"2026-05-01T12:57:55.563Z","type":"sent","lead":"Kathya Semencio Odontologia","phone":"5519982569981","instance":"brainram.com.br","ok":true,"id":"3EB0961D0DD4164AB26FD9"}
+{"ts":"2026-05-01T13:00:23.993Z","type":"sent","lead":"Clínica Dra. Rebeca Moura","phone":"551935971698","instance":"brainram.com.br","ok":true,"id":"3EB0D979694512DA1B914B"}
+{"ts":"2026-05-01T13:03:04.017Z","type":"sent","lead":"Sorridents Clínicas Odontológicas Centro São Carlos","phone":"5516997377853","instance":"brainram.com.br","ok":true,"id":"3EB04D4EA2C4336AD5D142"}
+{"ts":"2026-05-01T13:05:10.495Z","type":"sent","lead":"Oral Unic Implantes São Carlos","phone":"5516997447575","instance":"brainram.com.br","ok":true,"id":"3EB0A38AC53250E2CD2A49"}
+{"ts":"2026-05-01T13:08:09.281Z","type":"sent","lead":"OdontoCompany - Centro","phone":"551633075648","instance":"brainram.com.br","ok":true,"id":"3EB0CADE0C3BAE34AB8774"}
+{"ts":"2026-05-01T13:10:50.237Z","type":"sent","lead":"Urbano Laser Odontologia","phone":"5516997492199","instance":"brainram.com.br","ok":true,"id":"3EB021824B62858F789EF3"}
+{"ts":"2026-05-01T13:12:58.151Z","type":"sent","lead":"OdontoCompany Limeira","phone":"5519982095544","instance":"brainram.com.br","ok":true,"id":"3EB08627F684D62D37E811"}
+{"ts":"2026-05-01T13:15:13.822Z","type":"sent","lead":"Odontologia e Harmonização Facial - Clínica Especializada","phone":"5519988053318","instance":"brainram.com.br","ok":true,"id":"3EB05026CAF9BD777B6332"}
+{"ts":"2026-05-01T13:24:26.610Z","type":"dry_run","lead":"Camp Imagem","phone":"551937341100","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.613Z","type":"dry_run","lead":"Bianchessi","phone":"551935194580","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.613Z","type":"dry_run","lead":"Hermes Pardini","phone":"5531322862","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.613Z","type":"dry_run","lead":"Laboratório São Paulo","phone":"5531212601","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.614Z","type":"dry_run","lead":"Laboratório Geraldo Lustosa","phone":"5531210412","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.614Z","type":"dry_run","lead":"Laboratório Humberto Abrão","phone":"5531210457","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Laboratório Municipal de Referência","phone":"553132779275","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Radiologia Clínica de Campinas","phone":"551937535700","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Radiologia Clínica de Campinas - Hospital Casa de Saúde","phone":"551937363481","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Dr Matsushita","phone":"553132019730","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Clínica Tomocenter","phone":"553133492623","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"CTC MG","phone":"553132819833","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"CENTROCORDIS","phone":"551143368383","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"CIC Centro de Cardiologia Integrada","phone":"551138899750","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Centro Paulista de Diagnóstico e Tratamento","phone":"551155418834","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.615Z","type":"dry_run","lead":"Status Cor Clínica Cardiológica","phone":"552135784500","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.616Z","type":"dry_run","lead":"Quiro Salus – Clínica de Quiropraxia","phone":"55011989288181","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.616Z","type":"dry_run","lead":"DK Equilíbrio – Acupuntura e Clínica de Quiropraxia","phone":"55011989288181","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"QuiroSer","phone":"5511991774530","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Belle Spazio - Estética Avançada & Pilates","phone":"5541301306","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Centro de Eletrólise Justina Ryga Diuk","phone":"5541333640","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Estetic Ale - Estética Personalizada","phone":"5541333626","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Corporal","phone":"5541301952","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:24:26.617Z","type":"dry_run","lead":"Oligoflora Curitiba","phone":"5541309523","instance":"brainram.com.br"}
+{"ts":"2026-05-01T13:25:37.354Z","type":"error","lead":"Camp Imagem","phone":"551937341100","instance":"brainram.com.br","error":"send failed 400: {\"status\":400,\"error\":\"Bad Request\",\"response\":{\"message\":[{\"jid\":\"551937341100@s.whatsapp.net\",\"exists\":false,\"number\":\"551937341100\"}]}}"}
