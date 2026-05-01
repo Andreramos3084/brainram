@@ -1,6 +1,6 @@
 # 🎯 Status Atual da Operação BrainRam (ex-DFY-IA)
 
-**Última atualização:** 2026-04-23
+**Última atualização:** 2026-05-01
 
 ## Resumo das mudanças
 
@@ -20,7 +20,7 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 
 | Serviço | URL | Status |
 |---------|-----|--------|
-| Tunnel principal | https://sapphire-shed-plc-status.trycloudflare.com | ✅ Online |
+| Tunnel principal | https://sapphire-shed-plc-status.trycloudflare.com | ⚠️ Efêmero — pode rotacionar |
 | Health API | https://sapphire-shed-plc-status.trycloudflare.com/health | ✅ OK |
 | Admin Panel | https://sapphire-shed-plc-status.trycloudflare.com/admin | ✅ Online |
 | Dashboard React | https://sapphire-shed-plc-status.trycloudflare.com/ | ✅ Online |
@@ -72,7 +72,7 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 - ✅ Hostinger VPS: sales-server rebuildado e rodando
 - ✅ Nginx: reverse proxy configurado, servindo dashboard + API
 - ✅ Cloudflare Tunnel: apontando para VPS (efêmero)
-- ⏳ Cloudflare Worker: código pronto, aguardando autenticação wrangler
+- ✅ Cloudflare Worker: deployado em https://brainram-worker.andreelogio.workers.dev
 
 ### LGPD & Compliance
 - ✅ Política de privacidade completa
@@ -81,6 +81,23 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 - ✅ Checklist pré-disparo
 - ✅ Plano de resposta a incidentes
 - ✅ Tabela de consent_logs (audit trail)
+
+---
+
+## Bugs corrigidos (2026-05-01)
+
+| Bug | Severidade | Status |
+|-----|-----------|--------|
+| Nomes de modelos Claude fictícios (`claude-sonnet-4-5`, `claude-sonnet-4-7`) | 🔴 Crítico | ✅ Corrigido para `claude-3-5-sonnet-latest` / `claude-3-haiku-latest` |
+| `5-send-email.ts` — código duplicado no final (erro de sintaxe) | 🔴 Crítico | ✅ Corrigido |
+| `5-send-email.ts` — função `ensureDir` não definida | 🔴 Crítico | ✅ Implementada |
+| Workflow `daily-content.yml` sem `bun install` | 🟡 Alto | ✅ Adicionado step de install |
+| `onboard-client` — fetch de URL placeholder (`github.com/user/...`) | 🟡 Alto | ✅ Template embeddado no código |
+| `delivery/edge-functions/` — código duplicado de `supabase/functions/` | 🟡 Alto | ✅ Removido |
+| `/sales/dispatch` — endpoint sem autenticação | 🟡 Alto | ✅ Adicionado `x-admin-key` |
+| MCP `dfy_onboard` — documentado mas não implementado | 🟡 Alto | ✅ Removido do header |
+| MCP `dfy_generate_content` — stub inútil | 🟢 Médio | ✅ Removido do ListTools |
+| `.claude/`, `supabase/.temp/` versionados no git | 🟢 Médio | ✅ Removidos + .gitignore atualizado |
 
 ---
 
@@ -99,7 +116,7 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 
 ---
 
-## Estado Operacional (2026-04-23)
+## Estado Operacional (2026-05-01)
 
 | Item | Status |
 |---|---|
@@ -112,52 +129,25 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 | Sales server | ✅ Rebuildado e saudável |
 | Nginx + proxy | ✅ Configurado |
 | Cloudflare Tunnel | ✅ Funcionando |
-| Cloudflare Worker | ✅ Deployado em https://brainram-worker.andreelogio.workers.dev |
+| Cloudflare Worker | ✅ Deployado |
 
 ---
 
 ## Próximos passos imediatos
 
-1. **Deploy do Cloudflare Worker:**
-   ```bash
-   cd delivery/cloudflare-worker
-   npx wrangler login        # abre navegador
-   bash deploy.sh            # configura secrets e deploya
-   ```
-
-2. **Aplicar migração SQL** no Supabase:
+1. **Aplicar migração SQL** no Supabase:
    ```bash
    # Copiar conteúdo de delivery/migrations/add-email-lgpd.sql
    # Colar no SQL Editor do Supabase
    ```
 
-3. **Comprar 2º chip WhatsApp** e cadastrar em `wa_instances` com `warmup_stage=1, daily_cap=30`
+2. **Comprar 2º chip WhatsApp** e cadastrar em `wa_instances` com `warmup_stage=1, daily_cap=30`
 
-4. **Primeira campanha de email** prospecção fria (teste com 20 leads)
+3. **Primeira campanha de email** prospecção fria (teste com 20 leads)
 
-5. **Cliente beta** — rodar onboarding completo fim-a-fim
+4. **Cliente beta** — rodar onboarding completo fim-a-fim
 
----
-
-## Arquivos criados / modificados nesta sessão
-
-### Novos
-- `delivery/lgpd-compliance.md`
-- `delivery/email-outbound/engine.ts`
-- `delivery/email-outbound/templates.ts`
-- `delivery/cloudflare-worker/index.ts`
-- `delivery/cloudflare-worker/wrangler.toml`
-- `delivery/cloudflare-worker/deploy.sh`
-- `delivery/migrations/add-email-lgpd.sql`
-- `deploy/README-HOSTINGER-CLOUDFLARE.md`
-- `dashboard/cliente/` (projeto React completo)
-- `produto/agentes/nichos/` (6 prompts novos)
-- `scraper-engine/src/scrapers/google-maps-v2.ts`
-
-### Modificados
-- `delivery/agent-perplexity/sales-server.ts` — endpoints de dashboard, conversas, métricas
-- `delivery/agent-perplexity/tsconfig.json` — config TypeScript
-- `delivery/agent-perplexity/admin.ts` — canal email já integrado
+5. **Dashboard Settings** — implementar salvamento real (POST para API)
 
 ---
 
