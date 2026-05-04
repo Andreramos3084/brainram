@@ -318,6 +318,11 @@ async function executeAction(contact: string, action: string | null, args: any, 
     await sendText(ADMIN_PHONE, `📞 Lead quer atendimento pessoal\n\nContato: ${contact}\nHorários propostos: ${args?.horarios_propostos || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`, provider);
     return;
   }
+  if (action === 'enviar_contato') {
+    await sendText(contact, `Meu contato direto é (19) 99876-0212 — pode me chamar no WhatsApp que eu te ajudo.`, provider);
+    await sendText(ADMIN_PHONE, `📞 Lead pediu contato direto\n\nContato: ${contact}\n\nwa.me/${contact.replace(/\D/g, '')}`, provider);
+    return;
+  }
   if (action === 'escalar') {
     await sendText(ADMIN_PHONE, `⚠️ Escalada\n\nContato: ${contact}\nMotivo: ${args?.motivo || '-'}\n\nwa.me/${contact.replace(/\D/g, '')}`, provider);
     return;
