@@ -186,10 +186,12 @@ Usar `.github/workflows/daily-dispatch.yml` com `workflow_dispatch` + `schedule`
 ## Variáveis de Ambiente (.env no VPS)
 
 ```bash
-# === APIs ===
-ANTHROPIC_API_KEY=sk-ant-...
+# === APIs (Perplexity = engine principal) ===
 PERPLEXITY_KEY=pplx-...
 MP_ACCESS_TOKEN=APP_USR-...
+
+# === Assets ===
+DEMO_VIDEO_URL=https://nlcmhqevxpdttuhamjsj.supabase.co/storage/v1/object/public/public-assets/demo-video.mp4
 
 # === Supabase ===
 SUPABASE_URL=https://nlcmhqevxpdttuhamjsj.supabase.co

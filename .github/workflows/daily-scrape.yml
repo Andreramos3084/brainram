@@ -52,13 +52,13 @@ jobs:
           FILE=$(ls -t data/leads-raw-*.json | head -1)
           bun run scripts/2-enrich.ts "$FILE"
 
-      - name: Score with Haiku (cheap)
+      - name: Score with Perplexity (fast)
         working-directory: prospeccao
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERPLEXITY_KEY: ${{ secrets.PERPLEXITY_KEY }}
         run: |
           FILE=$(ls -t data/leads-enriched-*.json | head -1)
-          bun run scripts/3-score-haiku.ts "$FILE"
+          bun run scripts/3-score-pplx-v2.ts "$FILE"
 
       - name: Commit results
         run: |

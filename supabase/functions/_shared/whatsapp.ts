@@ -38,7 +38,7 @@ export interface SendResult {
 
 export function parseWebhook(payload: any): ParsedMessage | null {
   // Evolution format
-  if (payload?.event === 'messages.upsert' && payload.data) {
+  if (payload?.event?.toLowerCase?.() === 'messages.upsert' && payload.data) {
     const msg = payload.data;
     if (msg.key?.fromMe) return null;
     const from = String(msg.key?.remoteJid || '').replace(/@s\.whatsapp\.net|@g\.us/g, '');

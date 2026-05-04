@@ -17,7 +17,7 @@
 
 ### O que entrega
 1. Número WhatsApp dedicado (Evolution API instância isolada)
-2. Agente treinado no negócio do cliente (Claude + RAG dos dados dele)
+2. Agente treinado no negócio do cliente (Perplexity + RAG dos dados dele)
 3. Fluxos: atendimento, qualificação, agendamento, FAQ, orçamento
 4. Integração com Google Calendar (agendamento direto)
 5. Dashboard web do cliente (métricas, histórico, override humano)
@@ -59,32 +59,32 @@ Nichos que pagam, têm volume e são replicáveis:
 
 Cada fase tem um "trabalhador de IA" específico. Você só orquestra.
 
-### Fase 1 — Planejamento (IA = Claude)
+### Fase 1 — Planejamento (IA = Perplexity)
 - Gerar ICP detalhado por nicho
 - Gerar ofertas adaptadas por dor
 - Gerar árvore de decisão da conversa do agente
 
-### Fase 2 — Produção (IA = Claude + template)
+### Fase 2 — Produção (IA = Perplexity + template)
 - Landing page: template React clonável por nicho (variáveis: nome, dor, CTA)
 - Prompt do agente: template com slots (negócio, tom, FAQs, serviços, preços)
 - Dashboard cliente: 1 código, multi-tenant por `client_id`
 
-### Fase 3 — Marketing (IA = Claude + Perplexity + Remotion + Imagen)
+### Fase 3 — Marketing (IA = Perplexity + Remotion + Imagen)
 - **Content Factory diário:** 3 posts Instagram/dia, 1 reel/dia, 1 carrossel/semana
 - Perplexity pesquisa tendências do nicho
-- Claude escreve copy
+- Perplexity escreve copy
 - Imagen gera imagem
 - Remotion gera reel
 - n8n publica no agendador
 
-### Fase 4 — Prospecção (IA = scraper + Claude + Evolution)
+### Fase 4 — Prospecção (IA = scraper + Perplexity + Evolution)
 **Pipeline:**
 1. Scraper Google Maps → extrai 500 empresas do nicho/região/dia
 2. Enriquecimento: Perplexity pega site + Instagram + avaliações
-3. Claude analisa: "essa empresa tem dor que meu produto resolve?" → score 0-100
-4. Para top 100 do dia: Claude escreve mensagem **personalizada** baseada em algo real do negócio dele
+3. Perplexity analisa: "essa empresa tem dor que meu produto resolve?" → score 0-100
+4. Para top 100 do dia: Perplexity escreve mensagem **personalizada** baseada em algo real do negócio dele
 5. Evolution envia pelo WhatsApp (máx 50/dia por número, 3 números em rotação)
-6. Respostas → Claude classifica: interessado / dúvida / não / ignora
+6. Respostas → Perplexity classifica: interessado / dúvida / não / ignora
 7. Interessados → agenda call automática via Calendly link
 
 **Meta:** 500 abordagens/dia → 2-5% resposta → 10-25 conversas → 2-3 fechamentos/semana.
@@ -113,7 +113,7 @@ Form submetido → edge function:
 **Tempo de onboarding:** 24-48h automatizado.
 
 ### Fase 7 — Retenção (IA)
-- Relatório mensal PDF: métricas + insights + sugestões (Claude gera)
+- Relatório mensal PDF: métricas + insights + sugestões (Perplexity gera)
 - Alerta automático se uso cair (risco de churn)
 - Upsell trigger: se cliente usa >80% da capacidade → oferecer upgrade
 
@@ -125,7 +125,7 @@ Form submetido → edge function:
 |--------|-----------|--------|
 | WhatsApp | Evolution API | ✅ Já tem |
 | Backend | Supabase (edge functions + db) | ✅ Já tem |
-| IA conversa | Claude API (Sonnet 4.7) | ✅ Tem API key |
+| IA conversa | Perplexity API (sonar-pro) | ✅ Tem API key |
 | IA pesquisa | Perplexity sonar-pro | ✅ Já tem |
 | IA imagens | Gemini Imagen 3 (skill ai-imagegen) | ✅ |
 | Vídeos | Remotion (skill remotion-video-creator) | ✅ |

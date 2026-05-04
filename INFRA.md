@@ -103,11 +103,11 @@ Documento de referência dos serviços externos, endpoints e variáveis usadas p
 
 ---
 
-## 8. Anthropic (atendente IA — Claude)
+## 8. Perplexity (atendente IA — sonar/sonar-pro)
 
-- **Uso:** Claude 4.5 Sonnet no atendente de WhatsApp (pós-venda, responder leads convertidos).
+- **Uso:** API Perplexity no atendente de WhatsApp (pós-venda, responder leads convertidos) e content factory.
 - **Env:**
-  - `ANTHROPIC_API_KEY` (`sk-ant-...`)
+  - `PERPLEXITY_KEY` (`pplx-...`)
 
 ---
 

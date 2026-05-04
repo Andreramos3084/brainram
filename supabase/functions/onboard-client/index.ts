@@ -7,14 +7,13 @@
 
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import Anthropic from 'npm:@anthropic-ai/sdk@0.30.0';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL')!,
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
 );
 
-const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY')! });
+const PPLX_KEY = Deno.env.get('PERPLEXITY_KEY') || Deno.env.get('PERPLEXITY_API_KEY') || '';
 
 const EVO_URL = Deno.env.get('EVOLUTION_URL')!;
 const EVO_KEY = Deno.env.get('EVOLUTION_API_KEY')!;
@@ -102,6 +101,24 @@ const BASE_TEMPLATE = `Você é {{nome_agente}}, atendente virtual da {{nome_neg
 - Emojis com moderação (1 por mensagem no máx)
 - Sempre terminar com pergunta ou próximo passo claro`;
 
+async function callPerplexity(system: string, user: string): Promise<string> {
+  const res = await fetch('https://api.perplexity.ai/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${PPLX_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'sonar-pro',
+      max_tokens: 4000,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error(`Perplexity error ${res.status}: ${await res.text()}`);
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
 async function generateAgentPrompt(data: Record<string, any>): Promise<string> {
   // Opcional: fetch de template remoto customizado via env
   const customUrl = Deno.env.get('TEMPLATE_URL');
@@ -109,15 +126,10 @@ async function generateAgentPrompt(data: Record<string, any>): Promise<string> {
     ? await fetch(customUrl).then((r) => r.text()).catch(() => BASE_TEMPLATE)
     : BASE_TEMPLATE;
 
-  const res = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-latest',
-    max_tokens: 4000,
-    system:
-      'Você preenche o template do agente WhatsApp com os dados do cliente. Retorne APENAS o prompt final, pronto para uso, com todos os {{slots}} substituídos.',
-    messages: [{ role: 'user', content: `TEMPLATE:\n${template}\n\nDADOS DO CLIENTE:\n${JSON.stringify(data, null, 2)}` }],
-  });
+  const system = 'Você preenche o template do agente WhatsApp com os dados do cliente. Retorne APENAS o prompt final, pronto para uso, com todos os {{slots}} substituídos.';
+  const user = `TEMPLATE:\n${template}\n\nDADOS DO CLIENTE:\n${JSON.stringify(data, null, 2)}`;
 
-  return (res.content[0] as any).text;
+  return await callPerplexity(system, user);
 }
 
 serve(async (req) => {
@@ -150,7 +162,7 @@ serve(async (req) => {
   await supabase.from('agents').insert({
     tenant_id: tenant.id,
     system_prompt: systemPrompt,
-    model: 'claude-3-5-sonnet-latest',
+    model: 'sonar-pro',
     evolution_instance: instName,
   });
 
@@ -162,7 +174,7 @@ serve(async (req) => {
       headers: { 'Content-Type': 'application/json', apikey: EVO_KEY },
       body: JSON.stringify({
         number: adminPhone.replace(/\D/g, ''),
-        text: `✅ Seu atendente de IA tá sendo ativado!\n\nEm instantes você recebe o QR code pra escanear.\nDashboard: https://app.dfy-ia.com/${slug}\n\nQualquer dúvida, responda aqui.`,
+        text: `✅ Seu atendente de IA tá sendo ativado!\n\nEm instantes você recebe o QR code pra escanear.\nDashboard: https://app.brainram.com/${slug}\n\nQualquer dúvida, responda aqui.`,
       }),
     });
   }

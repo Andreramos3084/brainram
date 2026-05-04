@@ -34,7 +34,6 @@ Siga nessa ordem. Total: ~90 minutos.
 - [ ] Repo → Settings → Secrets → adicionar:
   - `SCRAPER_URL`
   - `SCRAPER_API_KEY`
-  - `ANTHROPIC_API_KEY`
   - `PERPLEXITY_KEY`
   - `EVOLUTION_URL`, `EVOLUTION_API_KEY`
   - `ADMIN_PHONE`
@@ -63,7 +62,7 @@ Siga nessa ordem. Total: ~90 minutos.
 ## Custos finais
 
 - **Fixo:** R$ 0/mês
-- **Variável (uso real):** ~R$ 100-180/mês Claude API quando tiver 20+ clientes ativos
+- **Variável (uso real):** ~R$ 50-100/mês Perplexity API quando tiver 20+ clientes ativos
 - **One-time:** ~R$ 45 chips WhatsApp pré-pago (3 números)
 
 ## Quando considerar pagar (não antes)

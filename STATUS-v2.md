@@ -88,7 +88,7 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 
 | Bug | Severidade | Status |
 |-----|-----------|--------|
-| Nomes de modelos Claude fictícios (`claude-sonnet-4-5`, `claude-sonnet-4-7`) | 🔴 Crítico | ✅ Corrigido para `claude-3-5-sonnet-latest` / `claude-3-haiku-latest` |
+| Nomes de modelos Claude fictícios (`claude-sonnet-4-5`, `claude-sonnet-4-7`) | 🔴 Crítico | ✅ Corrigido — migração completa para Perplexity `sonar` / `sonar-pro` |
 | `5-send-email.ts` — código duplicado no final (erro de sintaxe) | 🔴 Crítico | ✅ Corrigido |
 | `5-send-email.ts` — função `ensureDir` não definida | 🔴 Crítico | ✅ Implementada |
 | Workflow `daily-content.yml` sem `bun install` | 🟡 Alto | ✅ Adicionado step de install |
@@ -110,7 +110,7 @@ Operação pivotou de **DFY-IA** para **BrainRam** com as seguintes mudanças es
 | Supabase Free | **R$ 0** |
 | Vercel (landing) | **R$ 0** |
 | Resend (3k emails/mês) | **R$ 0** |
-| Claude API (otimizado) | R$ 100-180/mês |
+| Perplexity API (sonar/sonar-pro) | R$ 50-100/mês |
 | Perplexity (já pago) | **R$ 0** |
 | **TOTAL MENSAL** | **~R$ 150** |
 

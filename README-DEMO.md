@@ -93,10 +93,9 @@ Leads:
 
 ### Problema Resolvido: Webhook
 - Webhook da instância `brainram.com.br` reconfigurado com `tenant_id`
-- Modelo Claude atualizado: `claude-3-5-sonnet-latest`
+- Modelo Perplexity atualizado: `sonar-pro`
 - Instância agent atualizada: `brainram.com.br`
 
-### Problema Pendente: API Key Anthropic
-- **A API key do Anthropic é um placeholder** (`sk-ant-REPLACE-COM-SUA-KEY`)
-- O edge function não consegue gerar respostas sem key válida
-- **Ação necessária:** fornecer API key real do Anthropic para ativar o agente
+### API Key Perplexity
+- **API key configurada e funcionando** (`pplx-...`)
+- Edge functions usam Perplexity como engine de IA principal

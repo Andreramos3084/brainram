@@ -5,45 +5,45 @@
  * Gera: copy do post + prompt de imagem + roteiro de reel.
  * Imagem/reel em si: usar skill local ai-imagegen / remotion depois.
  *
- * Custo por dia: ~$0.02 (Claude Haiku + Perplexity já pago)
+ * Custo por dia: ~$0.02 (Perplexity sonar + já pago)
  */
 
-import Anthropic from '@anthropic-ai/sdk';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 const PPLX_KEY = process.env.PERPLEXITY_KEY!;
 
 const PILARES = [
   { dia: 0, tipo: 'reel', tema: 'Caso real: IA salvou lead de madrugada' },
   { dia: 1, tipo: 'carrossel', tema: '3 erros que custam R$5k/mês em leads perdidos' },
   { dia: 2, tipo: 'post', tema: 'Métrica de cliente: pacientes recuperados no mês' },
-  { dia: 3, tipo: 'reel', tema: 'Dentro do dashboard DFY-IA — bastidor' },
+  { dia: 3, tipo: 'reel', tema: 'Dentro do dashboard BrainRam — bastidor' },
   { dia: 4, tipo: 'story', tema: 'Enquete + caso rápido' },
   { dia: 5, tipo: 'carrossel', tema: 'Depoimento cliente (quote formatada)' },
   { dia: 6, tipo: 'off', tema: '' },
 ];
 
-async function researchTrend(): Promise<string> {
+async function callPerplexity(messages: Array<{ role: string; content: string }>, model = 'sonar') {
   const res = await fetch('https://api.perplexity.ai/chat/completions', {
     method: 'POST',
     headers: { Authorization: `Bearer ${PPLX_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'sonar-pro',
-      messages: [{
-        role: 'user',
-        content: 'Me dê 1 tendência atual da última semana sobre automação com IA em clínicas odontológicas ou imobiliárias no Brasil. Máx 3 linhas.',
-      }],
-      max_tokens: 300,
-    }),
+    body: JSON.stringify({ model, messages, max_tokens: 2000 }),
   });
+  if (!res.ok) throw new Error(`Perplexity error ${res.status}: ${await res.text()}`);
   const data = await res.json();
   return data.choices?.[0]?.message?.content || '';
 }
 
+async function researchTrend(): Promise<string> {
+  const content = await callPerplexity([{
+    role: 'user',
+    content: 'Me dê 1 tendência atual da última semana sobre automação com IA em clínicas odontológicas ou imobiliárias no Brasil. Máx 3 linhas.',
+  }], 'sonar-pro');
+  return content;
+}
+
 async function generateContent(pilar: typeof PILARES[0], trend: string) {
-  const prompt = `Hoje é ${new Date().toLocaleDateString('pt-BR')}. Crie conteúdo para Instagram da marca DFY-IA (atendente de IA no WhatsApp, B2B, alvo: clínicas odonto + imobiliárias).
+  const prompt = `Hoje é ${new Date().toLocaleDateString('pt-BR')}. Crie conteúdo para Instagram da marca BrainRam (atendente de IA no WhatsApp, B2B, alvo: clínicas odonto + imobiliárias).
 
 Formato: ${pilar.tipo}
 Tema do dia: ${pilar.tema}
@@ -62,13 +62,8 @@ Retorne JSON:
 
 Só JSON, sem preamble.`;
 
-  const res = await anthropic.messages.create({
-    model: 'claude-3-haiku-latest',
-    max_tokens: 2000,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const txt = (res.content[0] as any).text;
-  const match = txt.match(/\{[\s\S]*\}/);
+  const content = await callPerplexity([{ role: 'user', content: prompt }], 'sonar');
+  const match = content.match(/\{[\s\S]*\}/);
   return match ? JSON.parse(match[0]) : null;
 }
 

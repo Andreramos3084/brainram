@@ -9,7 +9,6 @@
     "send": "bun run scripts/4-send.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.30.0",
     "@supabase/supabase-js": "^2.104.0"
   }
 }
